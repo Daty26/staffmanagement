@@ -2,25 +2,22 @@ package de.university.staffmanagement.entity;
 
 import jakarta.persistence.*;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "clock_entries")
 public class ClockEntry {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "entry_id")
     private Long entryId;
 
-    @Column(name = "clock_in_time")
-    private LocalDate clockInTime;
+    @Column(nullable = false)
+    private LocalDateTime clockInTime;
 
-    @Column(name = "clock_out_time")
-    private LocalDate clockOutTime;
+    private LocalDateTime clockOutTime; // Can be null
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
-
 
 }

@@ -1,22 +1,26 @@
 package de.university.staffmanagement.entity;
 
 import jakarta.persistence.*;
-
 import java.time.LocalDateTime;
+
 @Entity
-@Table(name = "notifications")
 public class Notification {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "notification_id")
     private Long notificationId;
 
+    @Column(nullable = false)
     private String message;
 
-    @ManyToOne
-    @JoinColumn(name = "sender_id")
-    private User sender;
+    @Column(nullable = false)
+    private LocalDateTime sentDate;
 
-    @Column(name = "sent_at")
-    private LocalDateTime sentAt; // added
+    @Column(nullable = false)
+    private boolean read;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
 }

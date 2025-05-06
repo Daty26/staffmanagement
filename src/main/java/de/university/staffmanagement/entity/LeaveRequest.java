@@ -2,28 +2,29 @@ package de.university.staffmanagement.entity;
 
 import de.university.staffmanagement.enums.Status;
 import jakarta.persistence.*;
-
 import java.time.LocalDate;
+
 @Entity
-@Table(name = "leave_requests")
 public class LeaveRequest {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "request_id")
     private Long requestId;
-    private String type; //should we create enums for type of requests?
 
-    @Column(name = "start_date")
+    @Column(nullable = false)
     private LocalDate startDate;
 
-    @Column(name = "end_date")
+    @Column(nullable = false)
     private LocalDate endDate;
 
+    private String reason;
+
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Status status;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
 

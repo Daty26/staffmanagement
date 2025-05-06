@@ -1,30 +1,32 @@
 package de.university.staffmanagement.entity;
 
 
-import de.university.staffmanagement.enums.Roles;
+import de.university.staffmanagement.enums.Role;
 import jakarta.persistence.*;
-
-import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
+@Setter
+@Getter
 @Table(name = "users")
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long userId;
+
+    @Column(unique = true, nullable = false)
     private String username;
+
+    @Column(unique = true, nullable = false)
+    private String email;
+
+    @Column(nullable = false)
     private String password;
 
     @Enumerated(EnumType.STRING)
-    private Roles role;
-
-    @OneToOne(mappedBy = "user") // one user one PersonalInfo
-    private PersonalInfo personalInfo;
-
-    @OneToMany(mappedBy = "user") //one user - several entries
-    private List<ClockEntry> clockEntries;
-
-    @OneToMany(mappedBy = "user") // one user -several requests
-    private List<LeaveRequest> leaveRequests;
+    @Column(nullable = false)
+    private Role role;
 
 }

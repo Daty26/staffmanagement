@@ -1,32 +1,26 @@
 package de.university.staffmanagement.entity;
-
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "personal_info")
 public class PersonalInfo {
+
     @Id
-    @Column(name = "user_id")
-    private Long userId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long infoId;
 
-    @Column(name = "first_name")
-    private String firstName;
+    @Column(nullable = false)
+    private String fullName;
 
-    @Column(name = "last_name")
-    private String lastName;
+    private String phoneNumber;
 
-
-    private LocalDate birthdate;
-    private String email;
     private String address;
 
-    @Column(name = "mobile_phone")
-    private String mobilePhone;
+    private LocalDate birthDate;
 
     @OneToOne
-    @MapsId
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
 }

@@ -1,6 +1,6 @@
 package de.university.staffmanagement.enums;
 
-public enum Roles {
+public enum Role {
     EMPLOYEE,
     MANAGER
 }
