@@ -27,7 +27,7 @@ public class LeaveServiceImpl implements LeaveService {
     @Override
     public LeaveResponseDTO create(LeaveRequestDTO leaveRequestDTO) {
         LeaveRequest leaveRequest = leaveMapper.toEntity(leaveRequestDTO);
-//        System.out.println("the req crtd: " + leaveRequest.getLeaveType()  + leaveRequest.getStartDate() + leaveRequest.getEndDate()  + leaveRequest.getReason());
+        System.out.println("the req crtd: " + leaveRequest.getLeaveType()  + leaveRequest.getStartDate() + leaveRequest.getEndDate()  + leaveRequest.getReason());
         //we already check for null and empty values on the frontend side
         leaveRequest.setStatus(Status.PENDING);
         LeaveRequest savedRequest = leaveRepository.save(leaveRequest);
