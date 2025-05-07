@@ -60,7 +60,6 @@ public class UserServiceImpl implements UserService {
 
         user.setUsername(username);
         user.setEmail(email);
-        user.setEmail(email);
         userRepository.save(user);
 
         return userMapper.toDTO(user);
