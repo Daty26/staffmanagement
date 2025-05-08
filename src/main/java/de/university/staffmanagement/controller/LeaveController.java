@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+//@CrossOrigin(origins = "http://localhost:8087")
 @RequestMapping("/api/v1/leaves")
 public class LeaveController {
     private final LeaveService leaveService;
