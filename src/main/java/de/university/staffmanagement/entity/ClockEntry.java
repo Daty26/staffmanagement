@@ -20,8 +20,8 @@ public class ClockEntry {
 
     private LocalDateTime clockOutTime; // Can be null
 
-//    @ManyToOne
-//    @JoinColumn(name = "user_id", nullable = false)
-//    private User user;
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
 }

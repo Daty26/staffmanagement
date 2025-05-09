@@ -8,4 +8,5 @@ import java.time.LocalDateTime;
 public class ClockResponseDTO {
     private LocalDateTime clockInTime;
     private LocalDateTime clockOutTime;
+    private Long userId;
 }

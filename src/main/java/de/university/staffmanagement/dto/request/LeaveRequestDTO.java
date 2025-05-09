@@ -1,16 +1,16 @@
 package de.university.staffmanagement.dto.request;
 
+import de.university.staffmanagement.enums.LeaveType;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 @Data
 public class LeaveRequestDTO {
-    @NotBlank(message = "Leave type can not be empty")
-    private String leaveType;
-    @NotBlank(message = "Start date can not be empty")
+    private LeaveType leaveType;
     private String startDate;
-    @NotBlank(message = "End date can not be empty")
     private String endDate;
-    @NotBlank(message = "Reason can not be empty")
     private String reason;
+    private Long userId;
 }

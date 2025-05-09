@@ -8,11 +8,9 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface LeaveMapper {
-    LeaveResponseDTO toDTO(LeaveRequest leaveRequest);
-    @Mapping(source = "leaveType", target = "leaveType")
-    @Mapping(source = "startDate", target = "startDate")
-    @Mapping(source = "endDate", target = "endDate")
-    @Mapping(source = "reason", target = "reason")
+    @Mapping(source = "userId", target = "user.userId")
 
     LeaveRequest toEntity(LeaveRequestDTO leaveRequestDTO);
+    @Mapping(source = "user.userId", target = "userId")
+    LeaveResponseDTO toDTO(LeaveRequest leaveRequest);
 }

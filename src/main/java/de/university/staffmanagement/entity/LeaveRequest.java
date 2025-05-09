@@ -1,15 +1,16 @@
 package de.university.staffmanagement.entity;
 
+import de.university.staffmanagement.enums.LeaveType;
 import de.university.staffmanagement.enums.Status;
 import jakarta.persistence.*;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
 
 @Entity
-@Setter
-@Getter
+@Data
 public class LeaveRequest {
 
     @Id
@@ -17,8 +18,9 @@ public class LeaveRequest {
     private Long requestId;
 
     //Maybe create enums for leave_type?
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String leaveType;
+    private LeaveType leaveType;
 
     @Column(nullable = false)
     private String startDate;
@@ -31,9 +33,9 @@ public class LeaveRequest {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Status status;
-//
-//    @ManyToOne
-//    @JoinColumn(name = "user_id", nullable = true) //for test
-//    private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
 }

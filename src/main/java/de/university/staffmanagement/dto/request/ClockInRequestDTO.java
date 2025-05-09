@@ -7,6 +7,5 @@ import java.time.LocalDateTime;
 @Data
 public class ClockInRequestDTO {
     private LocalDateTime clockInTime;
-
-
+    private Long userId;
 }
