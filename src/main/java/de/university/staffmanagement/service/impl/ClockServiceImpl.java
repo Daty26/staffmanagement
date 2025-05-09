@@ -34,7 +34,8 @@ public class ClockServiceImpl implements ClockService {
 
     @Override
     public ClockResponseDTO clockOut(ClockOutRequestDTO clockOutRequestDTO) {
-       ClockEntry clockEntry = clockEntryRepository.findClockoutNull().orElseThrow(() -> new GeneralException("you have not clocked in yet"));
+       ClockEntry clockEntry = clockEntryRepository.findClockoutNull()
+               .orElseThrow(() -> new GeneralException("you have not clocked in yet"));
        clockEntry.setClockOutTime(clockOutRequestDTO.getClockOutTime());
        clockEntryRepository.save(clockEntry);
        return clockMapper.toDTO(clockEntry);

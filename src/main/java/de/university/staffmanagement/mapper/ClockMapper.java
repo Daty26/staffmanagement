@@ -8,7 +8,6 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface ClockMapper {
-    @Mapping(source = "clockInTime", target = "clockInTime")
     ClockEntry toEntity(ClockInRequestDTO clockInRequestDTO);
     ClockResponseDTO toDTO(ClockEntry clockEntry);
 }

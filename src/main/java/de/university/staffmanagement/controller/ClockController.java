@@ -5,6 +5,8 @@ import de.university.staffmanagement.dto.request.ClockOutRequestDTO;
 import de.university.staffmanagement.dto.response.ClockResponseDTO;
 import de.university.staffmanagement.service.ClockService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,11 +21,13 @@ public class ClockController {
         this.clockService = clockService;
     }
     @PostMapping("/in")
-    public ClockResponseDTO clockIn( @RequestBody ClockInRequestDTO clockInRequestDTO) {
-        return clockService.clockIn(clockInRequestDTO);
+    public ResponseEntity<ClockResponseDTO> clockIn(@RequestBody ClockInRequestDTO clockInRequestDTO) {
+        return new ResponseEntity<>(clockService.clockIn(clockInRequestDTO), HttpStatus.CREATED);
     }
+
+
     @PostMapping("/out")
-    public ClockResponseDTO clockOut(@RequestBody ClockOutRequestDTO clockOutRequestDTO) {
-        return clockService.clockOut(clockOutRequestDTO);
+    public ResponseEntity<ClockResponseDTO> clockOut(@RequestBody ClockOutRequestDTO clockOutRequestDTO) {
+        return new ResponseEntity<>(clockService.clockOut(clockOutRequestDTO), HttpStatus.OK);
     }
 }
