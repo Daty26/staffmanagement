@@ -14,5 +14,4 @@ public interface LeaveService {
     List<LeaveResponseDTO> getByStatus(Status status);
     LeaveResponseDTO updateStatus(Long id, Status newStatus);
 
-
 }
