@@ -1,6 +1,7 @@
 package de.university.staffmanagement.dto.response;
 
 import de.university.staffmanagement.entity.User;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -11,5 +12,6 @@ public class NotificationResponseDTO {
     private String message;
     private LocalDateTime sentDate;
     private boolean read;
+    @NotNull
     private Long userId;
 }

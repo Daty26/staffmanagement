@@ -3,6 +3,7 @@ package de.university.staffmanagement.dto.response;
 import de.university.staffmanagement.enums.LeaveType;
 import de.university.staffmanagement.enums.Status;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -14,5 +15,6 @@ public class LeaveResponseDTO {
     private String endDate;
     private String reason;
     private Status status;
+    @NotNull
     private Long userId;
 }
