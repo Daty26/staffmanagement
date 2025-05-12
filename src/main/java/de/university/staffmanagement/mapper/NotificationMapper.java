@@ -10,7 +10,8 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface NotificationMapper {
-    @Mapping(source = "user.userId", target = "userId")
+
+    @Mapping(source = "user.username", target = "username")
     NotificationResponseDTO toDTO(Notification notification);
     Notification toEntity(NotificationRequestDTO notificationRequestDTO);
 }

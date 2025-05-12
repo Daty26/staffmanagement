@@ -7,9 +7,11 @@ import de.university.staffmanagement.entity.Notification;
 import de.university.staffmanagement.entity.User;
 import de.university.staffmanagement.exception.GeneralException;
 import de.university.staffmanagement.mapper.NotificationMapper;
+import de.university.staffmanagement.mapper.UserMapper;
 import de.university.staffmanagement.repository.NotificationRepository;
 import de.university.staffmanagement.repository.UserRepository;
 import de.university.staffmanagement.service.NotificationService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -31,8 +33,8 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public NotificationResponseDTO sendNotification(NotificationRequestDTO dto) {
-        User user = userRepository.findById(dto.getUserId())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        User user = userRepository.findByUsername(dto.getUsername())
+                .orElseThrow(() -> new RuntimeException("Username not found"));
         Notification notification = new Notification();
         notification.setMessage(dto.getMessage());
         notification.setUser(user);

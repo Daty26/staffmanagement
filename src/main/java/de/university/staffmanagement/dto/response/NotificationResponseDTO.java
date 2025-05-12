@@ -13,5 +13,5 @@ public class NotificationResponseDTO {
     private LocalDateTime sentDate;
     private boolean read;
     @NotNull
-    private Long userId;
+    private String username;
 }

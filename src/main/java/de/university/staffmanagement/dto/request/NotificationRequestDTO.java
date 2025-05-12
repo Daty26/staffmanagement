@@ -7,5 +7,5 @@ import lombok.Data;
 public class NotificationRequestDTO {
 
     private String message;
-    private Long userId;
+    private String username;
 }
