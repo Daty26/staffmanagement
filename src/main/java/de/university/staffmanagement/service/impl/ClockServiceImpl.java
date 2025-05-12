@@ -10,10 +10,10 @@ import de.university.staffmanagement.mapper.ClockMapper;
 import de.university.staffmanagement.repository.ClockEntryRepository;
 import de.university.staffmanagement.repository.UserRepository;
 import de.university.staffmanagement.service.ClockService;
-import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ClockServiceImpl implements ClockService {
@@ -50,5 +50,24 @@ public class ClockServiceImpl implements ClockService {
        clockEntry.setClockOutTime(clockOutRequestDTO.getClockOutTime());
        clockEntryRepository.save(clockEntry);
        return clockMapper.toDTO(clockEntry);
+    }
+
+    @Override
+    public List<ClockResponseDTO> getEntryByUserId(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new GeneralException("User with this id was not found "));
+        List<ClockEntry> clockEntries = clockEntryRepository.findByUser(user);
+        return clockEntries.stream()
+                .map(clockMapper::toDTO)
+                .collect(Collectors.toList());
+
+    }
+
+    @Override
+    public List<ClockResponseDTO> getAll() {
+        return clockEntryRepository.findAll()
+                .stream()
+                .map(clockMapper::toDTO)
+                .collect(Collectors.toList());
     }
 }

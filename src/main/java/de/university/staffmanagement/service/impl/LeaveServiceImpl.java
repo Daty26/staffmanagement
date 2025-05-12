@@ -77,4 +77,16 @@ public class LeaveServiceImpl implements LeaveService {
         return leaveMapper.toDTO(updatedRequest);
     }
 
+    @Override
+    public List<LeaveResponseDTO> getReqByUserId(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new GeneralException("User with this id was not found "));
+        List<LeaveRequest> leaveRequests = leaveRepository.findByUser(user);
+        return leaveRequests.stream()
+                .map(leaveMapper::toDTO)
+                .collect(Collectors.toList());
+
+
+    }
+
 }

@@ -30,7 +30,10 @@ public class NotificationController {
         notificationService.deleteNotification(id);
         return ResponseEntity.noContent().build();
     }
-
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<NotificationResponseDTO>> getNotificationsByUserId(@PathVariable Long userId) {
+        return new ResponseEntity<>(notificationService.getNotificationByUserId(userId), HttpStatus.OK);
+    }
     @GetMapping
     public ResponseEntity<List<NotificationResponseDTO>> getAllNotifications() {
         List<NotificationResponseDTO> notifications = notificationService.getAll();

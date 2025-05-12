@@ -5,6 +5,7 @@ import de.university.staffmanagement.dto.request.NotificationRequestDTO;
 import de.university.staffmanagement.dto.response.NotificationResponseDTO;
 import de.university.staffmanagement.entity.Notification;
 import de.university.staffmanagement.entity.User;
+import de.university.staffmanagement.exception.GeneralException;
 import de.university.staffmanagement.mapper.NotificationMapper;
 import de.university.staffmanagement.repository.NotificationRepository;
 import de.university.staffmanagement.repository.UserRepository;
@@ -51,6 +52,16 @@ public class NotificationServiceImpl implements NotificationService {
     public List<NotificationResponseDTO> getAll() {
         return notificationRepository.findAll()
                 .stream()
+                .map(notificationMapper::toDTO)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<NotificationResponseDTO> getNotificationByUserId(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new GeneralException("User with this id was not found "));
+        List<Notification> notifications = notificationRepository.findByUser(user);
+        return notifications.stream()
                 .map(notificationMapper::toDTO)
                 .collect(Collectors.toList());
     }
