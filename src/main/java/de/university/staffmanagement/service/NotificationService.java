@@ -9,6 +9,7 @@ import java.util.List;
 public interface NotificationService {
     NotificationResponseDTO sendNotification(NotificationRequestDTO notificationRequestDTO);
     void deleteNotification(Long id);
+    void sendNotification(String username, String message);
     List<NotificationResponseDTO> getAll();
     List<NotificationResponseDTO> getNotificationByUserId(Long userId);
 }

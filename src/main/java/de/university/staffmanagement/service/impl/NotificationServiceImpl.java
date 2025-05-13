@@ -51,6 +51,18 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
+    public void sendNotification(String username, String message) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User with the username '" + username + "' not found"));
+        Notification notification = new Notification();
+        notification.setMessage(message);
+        notification.setUser(user);
+        notification.setSentDate(LocalDateTime.now());
+        notification.setRead(false);
+        notificationRepository.save(notification);
+    }
+
+    @Override
     public List<NotificationResponseDTO> getAll() {
         return notificationRepository.findAll()
                 .stream()
