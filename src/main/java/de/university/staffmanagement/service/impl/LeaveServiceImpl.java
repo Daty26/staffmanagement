@@ -81,6 +81,8 @@ public class LeaveServiceImpl implements LeaveService {
 
         leaveRequest.setStatus(newStatus);
         LeaveRequest updatedRequest = leaveRepository.save(leaveRequest);
+        String msg = "Your request for " + leaveRequest.getLeaveType().toString().toLowerCase() + " has been " + newStatus.toString().toLowerCase();
+        notificationService.sendNotification(leaveRequest.getUser().getUsername(), msg);
 
         return leaveMapper.toDTO(updatedRequest);
     }
@@ -93,8 +95,6 @@ public class LeaveServiceImpl implements LeaveService {
         return leaveRequests.stream()
                 .map(leaveMapper::toDTO)
                 .collect(Collectors.toList());
-
-
     }
 
 }
