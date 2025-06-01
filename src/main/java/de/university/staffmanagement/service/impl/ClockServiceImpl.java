@@ -39,7 +39,6 @@ public class ClockServiceImpl implements ClockService {
         clockEntryRepository.save(clockEntry);
         return clockMapper.toDTO(clockEntry);
     }
-
     @Override
     public ClockResponseDTO clockOut(ClockOutRequestDTO clockOutRequestDTO) {
         User user = userRepository.findById(clockOutRequestDTO.getUserId())

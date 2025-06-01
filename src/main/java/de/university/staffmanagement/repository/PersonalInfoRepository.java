@@ -1,5 +1,6 @@
 package de.university.staffmanagement.repository;
 
+import de.university.staffmanagement.entity.LeaveRequest;
 import de.university.staffmanagement.entity.Notification;
 import de.university.staffmanagement.entity.PersonalInfo;
 import de.university.staffmanagement.entity.User;

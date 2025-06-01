@@ -44,12 +44,14 @@ public class PersonalInfoServiceImpl implements PersonalInfoService {
         User user = userRepository.findById(personalInfoRequestDTO.getUserId())
                 .orElseThrow(() -> new RuntimeException("User Id not found"));
 
-        user.setEmail(personalInfoRequestDTO.getEmail());
-        user.setUsername(personalInfoRequestDTO.getUsername());
-        user.setRole(personalInfoRequestDTO.getRole());
-        userRepository.save(user);
+//        user.setEmail(personalInfoRequestDTO.getEmail());
+//        user.setUsername(personalInfoRequestDTO.getUsername());
+//        user.setRole(personalInfoRequestDTO.getRole());
+//        userRepository.save(user);
+        PersonalInfo personalInfo = personalInfoRepository.findById(personalInfoRequestDTO.getUserId())
+                .orElseThrow(() -> new RuntimeException("Personal info was not found for such user"));
 
-        PersonalInfo personalInfo = new PersonalInfo();
+
         personalInfo.setFullName(personalInfoRequestDTO.getFullName());
         personalInfo.setPhoneNumber(personalInfoRequestDTO.getPhoneNumber());
         personalInfo.setAddress(personalInfoRequestDTO.getAddress());
