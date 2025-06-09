@@ -9,6 +9,7 @@ import de.university.staffmanagement.exception.GeneralException;
 import de.university.staffmanagement.mapper.PersonalInfoMapper;
 import de.university.staffmanagement.repository.PersonalInfoRepository;
 import de.university.staffmanagement.repository.UserRepository;
+import de.university.staffmanagement.service.NotificationService;
 import de.university.staffmanagement.service.PersonalInfoService;
 import org.springframework.stereotype.Service;
 
@@ -23,12 +24,14 @@ public class PersonalInfoServiceImpl implements PersonalInfoService {
     private PersonalInfoRepository personalInfoRepository;
     private final UserRepository userRepository;
     private PersonalInfoMapper personalInfoMapper;
+    private final NotificationService notificationService;
 
 
-    public PersonalInfoServiceImpl(PersonalInfoRepository personalInfoRepository, PersonalInfoMapper personalInfoMapper, UserRepository userRepository) {
+    public PersonalInfoServiceImpl(PersonalInfoRepository personalInfoRepository, PersonalInfoMapper personalInfoMapper, UserRepository userRepository, NotificationService notificationService) {
         this.personalInfoRepository = personalInfoRepository;
         this.personalInfoMapper = personalInfoMapper;
         this.userRepository = userRepository;
+        this.notificationService = notificationService;
     }
     private String fullName;
     private String email;
@@ -43,6 +46,7 @@ public class PersonalInfoServiceImpl implements PersonalInfoService {
     public PersonalInfoResponseDTO update(PersonalInfoRequestDTO personalInfoRequestDTO) {
         User user = userRepository.findById(personalInfoRequestDTO.getUserId())
                 .orElseThrow(() -> new RuntimeException("User Id not found"));
+//        User will not be able to change user data
 
 //        user.setEmail(personalInfoRequestDTO.getEmail());
 //        user.setUsername(personalInfoRequestDTO.getUsername());
@@ -59,6 +63,9 @@ public class PersonalInfoServiceImpl implements PersonalInfoService {
         personalInfo.setUser(user);
 
         personalInfoRepository.save(personalInfo);
+//        System.out.println(personalInfoRequestDTO);
+        String msg = "Your profile page has been updated";
+        notificationService.sendNotification(user.getUsername(), msg);
         return personalInfoMapper.toDTO(personalInfo);
     }
 

@@ -1,6 +1,7 @@
 package de.university.staffmanagement.controller;
 
 
+import de.university.staffmanagement.dto.response.ResponseWrapper;
 import de.university.staffmanagement.service.UserService;
 import de.university.staffmanagement.dto.request.UserRequestDTO;
 import de.university.staffmanagement.dto.response.UserResponseDTO;
@@ -31,8 +32,8 @@ public class UserController {
 //    )
 //    @SecurityRequirement(name = "JWT")
 //    @PreAuthorize("hasAuthority('MANAGER')")
-    public ResponseEntity<UserResponseDTO> createUser(@RequestBody UserRequestDTO userRequestDTO) {
-        return new ResponseEntity<>(userService.create(userRequestDTO), HttpStatus.CREATED);
+    public ResponseEntity<ResponseWrapper<UserResponseDTO>> createUser(@RequestBody UserRequestDTO userRequestDTO) {
+        return new ResponseEntity<>(new ResponseWrapper<>(userService.create(userRequestDTO)), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
@@ -40,10 +41,10 @@ public class UserController {
 //            summary = "Updating user"
 //    )
 //    @SecurityRequirement(name = "JWT")
-    public ResponseEntity<UserResponseDTO> updateUser(@RequestParam String username,
+    public ResponseEntity<ResponseWrapper<UserResponseDTO>> updateUser(@RequestParam String username,
                                                       @RequestParam String email,
                                                       @AuthenticationPrincipal User user) {
-        return new ResponseEntity<>(userService.update(user, username, email), HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseWrapper<>(userService.update(user, username, email)), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
@@ -51,8 +52,8 @@ public class UserController {
 //            summary = "Getting user by id"
 //    )
 //    @SecurityRequirement(name = "JWT")
-    public ResponseEntity<UserResponseDTO> getUserById(@PathVariable Long id) {
-        return new ResponseEntity<>(userService.get(id), HttpStatus.OK);
+    public ResponseEntity<ResponseWrapper<UserResponseDTO>> getUserById(@PathVariable Long id) {
+        return new ResponseEntity<>(new ResponseWrapper<>(userService.get(id)), HttpStatus.OK);
     }
 
     @GetMapping
@@ -60,8 +61,8 @@ public class UserController {
 //            summary = "Getting all users"
 //    )
 //    @SecurityRequirement(name = "JWT")
-    public ResponseEntity<List<UserResponseDTO>> getAllUsers() {
-        return new ResponseEntity<>(userService.getAll(), HttpStatus.OK);
+    public ResponseEntity<ResponseWrapper<List<UserResponseDTO>>> getAllUsers() {
+        return new ResponseEntity<>(new ResponseWrapper<>(userService.getAll()), HttpStatus.OK);
     }
 
 }
