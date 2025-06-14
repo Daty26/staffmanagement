@@ -9,6 +9,7 @@ import de.university.staffmanagement.exception.GeneralException;
 import de.university.staffmanagement.mapper.PersonalInfoMapper;
 import de.university.staffmanagement.repository.PersonalInfoRepository;
 import de.university.staffmanagement.repository.UserRepository;
+import de.university.staffmanagement.service.NotificationService;
 import de.university.staffmanagement.service.PersonalInfoService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;

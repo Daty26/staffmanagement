@@ -39,17 +39,26 @@ public class ClockServiceImpl implements ClockService {
         clockEntryRepository.save(clockEntry);
         return clockMapper.toDTO(clockEntry);
     }
-
     @Override
     public ClockResponseDTO clockOut(ClockOutRequestDTO clockOutRequestDTO) {
         User user = userRepository.findById(clockOutRequestDTO.getUserId())
                 .orElseThrow(() -> new GeneralException("User not found"));
+
         ClockEntry clockEntry = clockEntryRepository.findClockoutNull()
                .orElseThrow(() -> new GeneralException("you have not clocked in yet"));
+
         clockEntry.setUser(user);
-       clockEntry.setClockOutTime(clockOutRequestDTO.getClockOutTime());
-       clockEntryRepository.save(clockEntry);
-       return clockMapper.toDTO(clockEntry);
+
+        if (clockEntry.getClockInTime() != null && clockOutRequestDTO.getClockOutTime() != null) {
+            long minutesWorked = java.time.Duration.between(clockEntry.getClockInTime(), clockOutRequestDTO.getClockOutTime()).toMinutes();
+            if (minutesWorked < 60) {
+                throw new GeneralException("You must work at least 1 hour before clocking out. You’ve worked " + minutesWorked + " minutes.");
+            }
+        }
+
+        clockEntry.setClockOutTime(clockOutRequestDTO.getClockOutTime());
+        clockEntryRepository.save(clockEntry);
+        return clockMapper.toDTO(clockEntry);
     }
 
     @Override

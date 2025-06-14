@@ -1,5 +1,7 @@
 package de.university.staffmanagement.exception;
 
+
+// do we need this class?
 public class ErrorResponse {
     private final String error;
 

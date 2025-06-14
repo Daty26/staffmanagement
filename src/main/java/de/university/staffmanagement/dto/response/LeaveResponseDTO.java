@@ -10,6 +10,7 @@ import java.time.LocalDate;
 
 @Data
 public class LeaveResponseDTO {
+    private Long requestId;
     private LeaveType leaveType;
     private String startDate;
     private String endDate;

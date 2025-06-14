@@ -10,6 +10,7 @@ import org.mapstruct.Mapping;
 public interface LeaveMapper {
     @Mapping(source = "userId", target = "user.userId")
     LeaveRequest toEntity(LeaveRequestDTO leaveRequestDTO);
+//    @Mapping(source = "requestId", target = "requestId")
     @Mapping(source = "user.userId", target = "userId")
     LeaveResponseDTO toDTO(LeaveRequest leaveRequest);
 }
