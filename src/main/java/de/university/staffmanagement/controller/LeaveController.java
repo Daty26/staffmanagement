@@ -30,7 +30,6 @@ public class LeaveController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-
     @GetMapping
     public ResponseEntity<List<LeaveResponseDTO>> getAllRequests() {
         return new ResponseEntity<>(leaveService.getAll(), HttpStatus.OK);

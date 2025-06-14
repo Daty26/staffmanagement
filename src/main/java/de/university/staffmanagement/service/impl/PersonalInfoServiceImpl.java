@@ -10,7 +10,10 @@ import de.university.staffmanagement.mapper.PersonalInfoMapper;
 import de.university.staffmanagement.repository.PersonalInfoRepository;
 import de.university.staffmanagement.repository.UserRepository;
 import de.university.staffmanagement.service.PersonalInfoService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -23,6 +26,7 @@ public class PersonalInfoServiceImpl implements PersonalInfoService {
     private PersonalInfoRepository personalInfoRepository;
     private final UserRepository userRepository;
     private PersonalInfoMapper personalInfoMapper;
+    private static final Logger logger = LoggerFactory.getLogger(PersonalInfoServiceImpl.class);
 
 
     public PersonalInfoServiceImpl(PersonalInfoRepository personalInfoRepository, PersonalInfoMapper personalInfoMapper, UserRepository userRepository) {

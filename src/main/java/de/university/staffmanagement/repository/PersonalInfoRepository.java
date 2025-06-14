@@ -10,5 +10,4 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface PersonalInfoRepository extends JpaRepository<PersonalInfo, Long> {
-}
+public interface PersonalInfoRepository extends JpaRepository<PersonalInfo, Long> { }

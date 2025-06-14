@@ -38,4 +38,5 @@ public class PersonalInfoController {
     public ResponseEntity<List<PersonalInfoResponseDTO>> getAllUsers() {
         return new ResponseEntity<>(personalInfoService.getAll(), HttpStatus.OK);
     }
+
 }
