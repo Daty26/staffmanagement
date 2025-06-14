@@ -11,7 +11,10 @@ import de.university.staffmanagement.repository.PersonalInfoRepository;
 import de.university.staffmanagement.repository.UserRepository;
 import de.university.staffmanagement.service.NotificationService;
 import de.university.staffmanagement.service.PersonalInfoService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -24,14 +27,13 @@ public class PersonalInfoServiceImpl implements PersonalInfoService {
     private PersonalInfoRepository personalInfoRepository;
     private final UserRepository userRepository;
     private PersonalInfoMapper personalInfoMapper;
-    private final NotificationService notificationService;
+    private static final Logger logger = LoggerFactory.getLogger(PersonalInfoServiceImpl.class);
 
 
-    public PersonalInfoServiceImpl(PersonalInfoRepository personalInfoRepository, PersonalInfoMapper personalInfoMapper, UserRepository userRepository, NotificationService notificationService) {
+    public PersonalInfoServiceImpl(PersonalInfoRepository personalInfoRepository, PersonalInfoMapper personalInfoMapper, UserRepository userRepository) {
         this.personalInfoRepository = personalInfoRepository;
         this.personalInfoMapper = personalInfoMapper;
         this.userRepository = userRepository;
-        this.notificationService = notificationService;
     }
     private String fullName;
     private String email;
@@ -46,16 +48,13 @@ public class PersonalInfoServiceImpl implements PersonalInfoService {
     public PersonalInfoResponseDTO update(PersonalInfoRequestDTO personalInfoRequestDTO) {
         User user = userRepository.findById(personalInfoRequestDTO.getUserId())
                 .orElseThrow(() -> new RuntimeException("User Id not found"));
-//        User will not be able to change user data
 
-//        user.setEmail(personalInfoRequestDTO.getEmail());
-//        user.setUsername(personalInfoRequestDTO.getUsername());
-//        user.setRole(personalInfoRequestDTO.getRole());
-//        userRepository.save(user);
-        PersonalInfo personalInfo = personalInfoRepository.findById(personalInfoRequestDTO.getUserId())
-                .orElseThrow(() -> new RuntimeException("Personal info was not found for such user"));
+        user.setEmail(personalInfoRequestDTO.getEmail());
+        user.setUsername(personalInfoRequestDTO.getUsername());
+        user.setRole(personalInfoRequestDTO.getRole());
+        userRepository.save(user);
 
-
+        PersonalInfo personalInfo = new PersonalInfo();
         personalInfo.setFullName(personalInfoRequestDTO.getFullName());
         personalInfo.setPhoneNumber(personalInfoRequestDTO.getPhoneNumber());
         personalInfo.setAddress(personalInfoRequestDTO.getAddress());
@@ -63,9 +62,6 @@ public class PersonalInfoServiceImpl implements PersonalInfoService {
         personalInfo.setUser(user);
 
         personalInfoRepository.save(personalInfo);
-//        System.out.println(personalInfoRequestDTO);
-        String msg = "Your profile page has been updated";
-        notificationService.sendNotification(user.getUsername(), msg);
         return personalInfoMapper.toDTO(personalInfo);
     }
 

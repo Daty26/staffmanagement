@@ -101,7 +101,6 @@ public class LeaveServiceImpl implements LeaveService {
 
 
 
-
         List<LeaveRequest> leaveRequests = leaveRepository.findByUser(user);
 
         return leaveRequests.stream()

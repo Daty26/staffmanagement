@@ -31,7 +31,6 @@ public class LeaveController {
         return new ResponseEntity<>(new ResponseWrapper<>(response), HttpStatus.CREATED);
     }
 
-
     @GetMapping
     public ResponseEntity<ResponseWrapper<List<LeaveResponseDTO>>> getAllRequests() {
         return new ResponseEntity<>(new ResponseWrapper<>(leaveService.getAll()), HttpStatus.OK);
