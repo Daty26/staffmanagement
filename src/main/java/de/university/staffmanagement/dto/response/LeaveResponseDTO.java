@@ -17,5 +17,5 @@ public class LeaveResponseDTO {
     private String reason;
     private Status status;
     @NotNull
-    private Long userId;
+    private String fullname;
 }

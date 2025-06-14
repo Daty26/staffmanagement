@@ -5,11 +5,13 @@ import de.university.staffmanagement.dto.request.NotificationRequestDTO;
 import de.university.staffmanagement.dto.response.LeaveResponseDTO;
 import de.university.staffmanagement.dto.response.NotificationResponseDTO;
 import de.university.staffmanagement.entity.LeaveRequest;
+import de.university.staffmanagement.entity.PersonalInfo;
 import de.university.staffmanagement.entity.User;
 import de.university.staffmanagement.enums.Status;
 import de.university.staffmanagement.exception.GeneralException;
 import de.university.staffmanagement.mapper.LeaveMapper;
 import de.university.staffmanagement.repository.LeaveRepository;
+import de.university.staffmanagement.repository.PersonalInfoRepository;
 import de.university.staffmanagement.repository.UserRepository;
 import de.university.staffmanagement.service.LeaveService;
 import de.university.staffmanagement.service.NotificationService;
@@ -24,12 +26,14 @@ public class LeaveServiceImpl implements LeaveService {
     private final LeaveMapper leaveMapper;
     private final UserRepository userRepository;
     private final NotificationService notificationService;
+    private final PersonalInfoRepository personalInfoRepository;
 
-    public LeaveServiceImpl(LeaveRepository leaveRepository, LeaveMapper leaveMapper, UserRepository userRepository, NotificationService notificationService) {
+    public LeaveServiceImpl(LeaveRepository leaveRepository, LeaveMapper leaveMapper, UserRepository userRepository, NotificationService notificationService, PersonalInfoRepository personalInfoRepository) {
         this.leaveRepository = leaveRepository;
         this.leaveMapper = leaveMapper;
         this.userRepository = userRepository;
         this.notificationService = notificationService;
+        this.personalInfoRepository = personalInfoRepository;
     }
 
 
@@ -90,10 +94,22 @@ public class LeaveServiceImpl implements LeaveService {
     @Override
     public List<LeaveResponseDTO> getReqByUserId(Long userId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new GeneralException("User with this id was not found "));
+                .orElseThrow(() -> new GeneralException("User with this id was not found"));
+
+        PersonalInfo personalInfo = personalInfoRepository.findByUser(user)
+                .orElseThrow(() -> new RuntimeException("Personal info was not found for this user"));
+
+
+
+
         List<LeaveRequest> leaveRequests = leaveRepository.findByUser(user);
+
         return leaveRequests.stream()
-                .map(leaveMapper::toDTO)
+                .map(leaveRequest -> {
+                    LeaveResponseDTO dto = leaveMapper.toDTO(leaveRequest);
+                    dto.setFullname(personalInfo.getFullName());
+                    return dto;
+                })
                 .collect(Collectors.toList());
     }
 
