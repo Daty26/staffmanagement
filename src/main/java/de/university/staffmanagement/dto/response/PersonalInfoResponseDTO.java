@@ -1,5 +1,6 @@
 package de.university.staffmanagement.dto.response;
 
+import de.university.staffmanagement.entity.User;
 import de.university.staffmanagement.enums.Role;
 import lombok.Data;
 import java.time.LocalDate;
@@ -16,4 +17,16 @@ public class PersonalInfoResponseDTO {
     private LocalDate birthDate;
     private String username;
     private Long userId;
+
+    //create new personal infor if user has none
+    public PersonalInfoResponseDTO(User user) {
+        this.userId = user.getUserId();
+        this.email = user.getEmail();
+        this.username = user.getUsername();
+        this.role = user.getRole();
+        this.fullName = "";
+        this.phoneNumber = "";
+        this.address = "";
+        this.birthDate = null;
+    }
 }

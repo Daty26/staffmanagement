@@ -2,10 +2,14 @@ package de.university.staffmanagement.entity;
 
 import de.university.staffmanagement.enums.ScheduleType;
 import jakarta.persistence.*;
+import lombok.Data;
+
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Entity
-public class ShiftCalendar {
+@Data
+public class ShiftAssignment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -14,12 +18,18 @@ public class ShiftCalendar {
     @Column(nullable = false)
     private LocalDate shiftDate;
 
+    @Column(nullable = false)
+    private LocalTime startTime;
+
+    @Column(nullable = false)
+    private LocalTime endTime;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private ScheduleType shiftType;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id")
     private User user;
 
 }

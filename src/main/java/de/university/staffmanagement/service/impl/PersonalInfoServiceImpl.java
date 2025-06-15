@@ -35,31 +35,22 @@ public class PersonalInfoServiceImpl implements PersonalInfoService {
         this.personalInfoMapper = personalInfoMapper;
         this.userRepository = userRepository;
     }
-    private String fullName;
-    private String email;
-    private Role role;
-    private String phoneNumber;
-    private String address;
-    private LocalDate birthDate;
-    private String username;
-    private Long userId;
 
     @Override
     public PersonalInfoResponseDTO update(PersonalInfoRequestDTO personalInfoRequestDTO) {
         User user = userRepository.findById(personalInfoRequestDTO.getUserId())
                 .orElseThrow(() -> new RuntimeException("User Id not found"));
+        //creates the profile page if it's not created
+        PersonalInfo personalInfo = personalInfoRepository.findByUser(user).orElseGet(() -> {
+            PersonalInfo newInfo = new PersonalInfo();
+            newInfo.setUser(user);
+            return newInfo;
+        });
 
-        user.setEmail(personalInfoRequestDTO.getEmail());
-        user.setUsername(personalInfoRequestDTO.getUsername());
-        user.setRole(personalInfoRequestDTO.getRole());
-        userRepository.save(user);
-
-        PersonalInfo personalInfo = new PersonalInfo();
         personalInfo.setFullName(personalInfoRequestDTO.getFullName());
         personalInfo.setPhoneNumber(personalInfoRequestDTO.getPhoneNumber());
         personalInfo.setAddress(personalInfoRequestDTO.getAddress());
         personalInfo.setBirthDate(personalInfoRequestDTO.getBirthDate());
-        personalInfo.setUser(user);
 
         personalInfoRepository.save(personalInfo);
         return personalInfoMapper.toDTO(personalInfo);
@@ -67,7 +58,12 @@ public class PersonalInfoServiceImpl implements PersonalInfoService {
 
     @Override
     public PersonalInfoResponseDTO get(Long id) {
-        return personalInfoMapper.toDTO(personalInfoRepository.findById(id).orElseThrow(() -> new GeneralException("User not found")));
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new GeneralException("User not found"));
+
+        return personalInfoRepository.findByUser(user)
+                .map(personalInfoMapper::toDTO)
+                .orElseGet(() -> new PersonalInfoResponseDTO(user));
     }
 
     @Override
