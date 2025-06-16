@@ -1,5 +1,6 @@
 package de.university.staffmanagement.service.impl;
 
+import de.university.staffmanagement.enums.Role;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -20,6 +21,10 @@ public class JwtService {
     public static final String SECRET = "357638792F423F4428472B4B6250655368566D597133743677397A2443264629";
 
     public String extractUsername(String token) {
+        return extractClaim(token, Claims::getSubject);
+    }
+
+    public String extractRole(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
@@ -51,8 +56,10 @@ public class JwtService {
     }
 
 
-    public String GenerateToken(String username) {
+    public String GenerateToken(String username, Role role) {
         Map<String, Object> claims = new HashMap<>();
+        claims.put("role", role);
+
         return createToken(claims, username);
     }
 
