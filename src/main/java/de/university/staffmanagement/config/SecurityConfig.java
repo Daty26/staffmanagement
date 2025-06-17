@@ -32,10 +32,8 @@ public class SecurityConfig {
     private final String[] WHITELISTED_ENDPOINTS = {
             "/swagger-ui/**",
             "/v3/api-docs/**",
-            "/api/v1/sign-up",
             "/api/v1/login",
             "/api/v1/refreshToken",
-            "/api/v1/verify/**"
     };
 
     @Bean
