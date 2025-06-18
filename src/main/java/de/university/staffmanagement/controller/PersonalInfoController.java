@@ -6,9 +6,11 @@ import de.university.staffmanagement.dto.response.NotificationResponseDTO;
 import de.university.staffmanagement.dto.response.PersonalInfoResponseDTO;
 import de.university.staffmanagement.dto.response.ResponseWrapper;
 import de.university.staffmanagement.dto.response.UserResponseDTO;
+import de.university.staffmanagement.entity.User;
 import de.university.staffmanagement.service.PersonalInfoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,12 +26,12 @@ public class PersonalInfoController {
         this.personalInfoService = personalInfoService;
     }
     @PutMapping("/updatePersonalInfo")
-    public ResponseEntity<ResponseWrapper<PersonalInfoResponseDTO>> updatePersonalInfo(@RequestBody PersonalInfoRequestDTO personalInfoRequestDTO) {
-        return new ResponseEntity<>(new ResponseWrapper<>(personalInfoService.update(personalInfoRequestDTO)), HttpStatus.CREATED);
+    public ResponseEntity<ResponseWrapper<PersonalInfoResponseDTO>> updatePersonalInfo(@RequestBody PersonalInfoRequestDTO personalInfoRequestDTO,@AuthenticationPrincipal User user) {
+        return new ResponseEntity<>(new ResponseWrapper<>(personalInfoService.update(personalInfoRequestDTO, user)), HttpStatus.CREATED);
     }
-    @GetMapping("/user/{id}")
-    public ResponseEntity<ResponseWrapper<PersonalInfoResponseDTO>> getUserById(@PathVariable Long id) {
-        return new ResponseEntity<>(new ResponseWrapper<>(personalInfoService.get(id)), HttpStatus.OK);
+    @GetMapping("/user")
+    public ResponseEntity<ResponseWrapper<PersonalInfoResponseDTO>> getUserById(@AuthenticationPrincipal User user) {
+        return new ResponseEntity<>(new ResponseWrapper<>(personalInfoService.get(user)), HttpStatus.OK);
     }
 
     @GetMapping

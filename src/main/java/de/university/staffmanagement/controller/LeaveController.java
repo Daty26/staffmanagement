@@ -5,11 +5,13 @@ import de.university.staffmanagement.dto.request.UserRequestDTO;
 import de.university.staffmanagement.dto.response.LeaveResponseDTO;
 import de.university.staffmanagement.dto.response.ResponseWrapper;
 import de.university.staffmanagement.dto.response.UserResponseDTO;
+import de.university.staffmanagement.entity.User;
 import de.university.staffmanagement.enums.Status;
 import de.university.staffmanagement.service.LeaveService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,8 +27,8 @@ public class LeaveController {
     }
 
     @PostMapping
-    public ResponseEntity<ResponseWrapper<LeaveResponseDTO>> createRequest(@RequestBody LeaveRequestDTO leaveRequestDTO) {
-        LeaveResponseDTO response = leaveService.create(leaveRequestDTO);
+    public ResponseEntity<ResponseWrapper<LeaveResponseDTO>> createRequest(@RequestBody LeaveRequestDTO leaveRequestDTO, @AuthenticationPrincipal User user ) {
+        LeaveResponseDTO response = leaveService.create(leaveRequestDTO, user);
 //        System.out.println(response);
         return new ResponseEntity<>(new ResponseWrapper<>(response), HttpStatus.CREATED);
     }
@@ -35,7 +37,7 @@ public class LeaveController {
     public ResponseEntity<ResponseWrapper<List<LeaveResponseDTO>>> getAllRequests() {
         return new ResponseEntity<>(new ResponseWrapper<>(leaveService.getAll()), HttpStatus.OK);
     }
-    @GetMapping("/user/{userId}")
+    @GetMapping("/user")
     public ResponseEntity<ResponseWrapper<List<LeaveResponseDTO>>> getRequestsByUserId(@PathVariable Long userId) {
         return new ResponseEntity<>(new ResponseWrapper<>(leaveService.getReqByUserId(userId)), HttpStatus.OK);
     }

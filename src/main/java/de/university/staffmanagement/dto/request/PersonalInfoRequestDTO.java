@@ -20,5 +20,5 @@ public class PersonalInfoRequestDTO {
     private String address;
     private LocalDate birthDate;
     private String username;
-    private Long userId;
+//    private Long userId;
 }

@@ -37,8 +37,8 @@ public class PersonalInfoServiceImpl implements PersonalInfoService {
     }
 
     @Override
-    public PersonalInfoResponseDTO update(PersonalInfoRequestDTO personalInfoRequestDTO) {
-        User user = userRepository.findById(personalInfoRequestDTO.getUserId())
+    public PersonalInfoResponseDTO update(PersonalInfoRequestDTO personalInfoRequestDTO, User authorizedUser) {
+        User user = userRepository.findById(authorizedUser.getUserId())
                 .orElseThrow(() -> new RuntimeException("User Id not found"));
         //creates the profile page if it's not created
         PersonalInfo personalInfo = personalInfoRepository.findByUser(user).orElseGet(() -> {
@@ -57,8 +57,8 @@ public class PersonalInfoServiceImpl implements PersonalInfoService {
     }
 
     @Override
-    public PersonalInfoResponseDTO get(Long id) {
-        User user = userRepository.findById(id)
+    public PersonalInfoResponseDTO get(User authorizedUser) {
+        User user = userRepository.findById(authorizedUser.getUserId())
                 .orElseThrow(() -> new GeneralException("User not found"));
 
         return personalInfoRepository.findByUser(user)

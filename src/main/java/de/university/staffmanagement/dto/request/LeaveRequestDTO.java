@@ -12,5 +12,5 @@ public class LeaveRequestDTO {
     private String startDate;
     private String endDate;
     private String reason;
-    private Long userId;
+//    private Long userId;
 }

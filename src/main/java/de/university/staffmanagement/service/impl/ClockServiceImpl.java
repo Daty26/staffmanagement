@@ -26,28 +26,25 @@ public class ClockServiceImpl implements ClockService {
         this.userRepository = userRepository;
     }
     @Override
-    public ClockResponseDTO clockIn(ClockInRequestDTO clockInRequestDTO) {
+    public ClockResponseDTO clockIn(ClockInRequestDTO clockInRequestDTO, User authenticatedUser) {
 
-        boolean hasClockIn = clockEntryRepository.findClockoutNull().isPresent();
+        boolean hasClockIn = clockEntryRepository.findByUser_UserIdAndClockOutTimeIsNull(authenticatedUser.getUserId()).isPresent();
         if (hasClockIn) {
             throw new GeneralException("you have already clocked in");
         }
-        User user = userRepository.findById(clockInRequestDTO.getUserId())
-                .orElseThrow(() -> new GeneralException("User not found"));
         ClockEntry clockEntry = clockMapper.toEntity(clockInRequestDTO);
-        clockEntry.setUser(user);
+        clockEntry.setUser(authenticatedUser);
         clockEntryRepository.save(clockEntry);
         return clockMapper.toDTO(clockEntry);
     }
-    @Override
-    public ClockResponseDTO clockOut(ClockOutRequestDTO clockOutRequestDTO) {
-        User user = userRepository.findById(clockOutRequestDTO.getUserId())
-                .orElseThrow(() -> new GeneralException("User not found"));
 
-        ClockEntry clockEntry = clockEntryRepository.findClockoutNull()
+    @Override
+    public ClockResponseDTO clockOut(ClockOutRequestDTO clockOutRequestDTO, User authenticatedUser) {
+        //work on this method down bellow
+        ClockEntry clockEntry = clockEntryRepository.findByUser_UserIdAndClockOutTimeIsNull(authenticatedUser.getUserId())
                .orElseThrow(() -> new GeneralException("you have not clocked in yet"));
 
-        clockEntry.setUser(user);
+        clockEntry.setUser(authenticatedUser);
 
         if (clockEntry.getClockInTime() != null && clockOutRequestDTO.getClockOutTime() != null) {
             long minutesWorked = java.time.Duration.between(clockEntry.getClockInTime(), clockOutRequestDTO.getClockOutTime()).toMinutes();
@@ -62,15 +59,13 @@ public class ClockServiceImpl implements ClockService {
     }
 
     @Override
-    public List<ClockResponseDTO> getEntryByUserId(Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new GeneralException("User with this id was not found "));
-        List<ClockEntry> clockEntries = clockEntryRepository.findByUser(user);
+    public List<ClockResponseDTO> getEntryByUser(User user) {
+        List<ClockEntry> clockEntries = clockEntryRepository.findByUser_UserId(user.getUserId());
         return clockEntries.stream()
                 .map(clockMapper::toDTO)
                 .collect(Collectors.toList());
-
     }
+
 
     @Override
     public List<ClockResponseDTO> getAll() {

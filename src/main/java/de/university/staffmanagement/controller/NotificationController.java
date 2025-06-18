@@ -4,9 +4,11 @@ package de.university.staffmanagement.controller;
 import de.university.staffmanagement.dto.request.NotificationRequestDTO;
 import de.university.staffmanagement.dto.response.NotificationResponseDTO;
 import de.university.staffmanagement.dto.response.ResponseWrapper;
+import de.university.staffmanagement.entity.User;
 import de.university.staffmanagement.service.NotificationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,9 +34,9 @@ public class NotificationController {
 //        return ResponseEntity.noContent().build();
         return ResponseEntity.ok(new ResponseWrapper<>(null, ""));
     }
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<ResponseWrapper<List<NotificationResponseDTO>>> getNotificationsByUserId(@PathVariable Long userId) {
-        return new ResponseEntity<>(new ResponseWrapper<>( notificationService.getNotificationByUserId(userId)), HttpStatus.OK);
+    @GetMapping("/user")
+    public ResponseEntity<ResponseWrapper<List<NotificationResponseDTO>>> getNotificationsByUserId(@AuthenticationPrincipal User user) {
+        return new ResponseEntity<>(new ResponseWrapper<>( notificationService.getNotificationByUserId(user.getUserId())), HttpStatus.OK);
     }
     @GetMapping
     public ResponseEntity<ResponseWrapper<List<NotificationResponseDTO>>> getAllNotifications() {

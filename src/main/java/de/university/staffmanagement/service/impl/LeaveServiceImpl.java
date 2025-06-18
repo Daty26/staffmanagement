@@ -38,9 +38,7 @@ public class LeaveServiceImpl implements LeaveService {
 
 
     @Override
-    public LeaveResponseDTO create(LeaveRequestDTO leaveRequestDTO) {
-        User user = userRepository.findById(leaveRequestDTO.getUserId())
-                .orElseThrow(() -> new GeneralException("User not found"));
+    public LeaveResponseDTO create(LeaveRequestDTO leaveRequestDTO, User user) {
         LeaveRequest leaveRequest = leaveMapper.toEntity(leaveRequestDTO);
 //        System.out.println("the req crtd: " + leaveRequest.getLeaveType()   + leaveRequest.getStartDate() + leaveRequest.getEndDate()  + leaveRequest.getReason());
         //we already checked for null and empty values on the frontend side

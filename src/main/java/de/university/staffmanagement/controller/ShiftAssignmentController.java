@@ -4,10 +4,12 @@ import de.university.staffmanagement.dto.request.ShiftAssignmentRequest;
 import de.university.staffmanagement.dto.response.PersonalInfoResponseDTO;
 import de.university.staffmanagement.dto.response.ResponseWrapper;
 import de.university.staffmanagement.dto.response.ShiftAssignmentResponse;
+import de.university.staffmanagement.entity.User;
 import de.university.staffmanagement.service.ShiftAssignmentService;
 import de.university.staffmanagement.service.impl.ShiftAssignmentServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,8 +32,8 @@ public class ShiftAssignmentController {
         return new ResponseEntity<>(new ResponseWrapper<>(shiftAssignmentService.getAll()), HttpStatus.OK);
     }
 
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<ResponseWrapper<List<ShiftAssignmentResponse>>> getByUser(@PathVariable Long userId) {
-        return new ResponseEntity<>(new ResponseWrapper<>(shiftAssignmentService.getByUserId(userId)), HttpStatus.OK);
+    @GetMapping("/user")
+    public ResponseEntity<ResponseWrapper<List<ShiftAssignmentResponse>>> getByUser(@AuthenticationPrincipal User user) {
+        return new ResponseEntity<>(new ResponseWrapper<>(shiftAssignmentService.getByUserId(user.getUserId())), HttpStatus.OK);
     }
 }

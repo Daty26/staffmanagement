@@ -7,5 +7,5 @@ import java.time.LocalDateTime;
 @Data
 public class ClockOutRequestDTO {
     private LocalDateTime clockOutTime;
-    private Long userId;
+//    private Long userId;
 }

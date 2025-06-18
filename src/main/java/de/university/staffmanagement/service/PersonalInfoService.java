@@ -10,9 +10,9 @@ import de.university.staffmanagement.entity.User;
 import java.util.List;
 
 public interface PersonalInfoService {
-    PersonalInfoResponseDTO get(Long id);
+    PersonalInfoResponseDTO get(User user);
 
-    PersonalInfoResponseDTO update(PersonalInfoRequestDTO personalInfoRequestDTO);
+    PersonalInfoResponseDTO update(PersonalInfoRequestDTO personalInfoRequestDTO, User user);
 
     List<PersonalInfoResponseDTO> getAll();
 }
