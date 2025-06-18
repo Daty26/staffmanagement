@@ -42,11 +42,9 @@ public class ShiftAssignmentServiceImpl implements ShiftAssignmentService {
     @Override
     public List<ShiftAssignmentResponse> getAll() {
         return repository.findAll().stream()
-                .map(shift -> {
-                    String fullName = shift.getUser().getUsername();
-                    return mapper.toDTO(shift, fullName);
-                })
+                .map(shift -> mapper.toDTO(shift, shift.getUser().getUsername()))
                 .collect(Collectors.toList());
+
     }
 
     @Override

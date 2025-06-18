@@ -19,5 +19,6 @@ public interface ShiftAssignmentMapper {
     @Mapping(target = "startTime", expression = "java(shift.getStartTime().toString())")
     @Mapping(target = "endTime", expression = "java(shift.getEndTime().toString())")
     @Mapping(target = "fullName", expression = "java(fullName)")
+    @Mapping(target = "role", expression = "java(shift.getUser().getRole())")
     ShiftAssignmentResponse toDTO(ShiftAssignment shift, String fullName);
 }

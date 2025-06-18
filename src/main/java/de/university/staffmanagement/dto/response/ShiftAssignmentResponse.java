@@ -1,5 +1,6 @@
 package de.university.staffmanagement.dto.response;
 
+import de.university.staffmanagement.enums.Role;
 import de.university.staffmanagement.enums.ScheduleType;
 import lombok.Data;
 
@@ -12,7 +13,7 @@ public class ShiftAssignmentResponse{
     //how many hours employee supposed to work
     private String startTime;
     private String endTime;
-
+    private Role role;
     private ScheduleType shiftType;
     private String fullName;
 }
