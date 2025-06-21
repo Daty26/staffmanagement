@@ -34,6 +34,9 @@ public class LeaveRequest {
     @Column(nullable = false)
     private Status status;
 
+    @Column(nullable = true)
+    private String managerComment;
+
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "userId",nullable = false)
     private User user;

@@ -12,5 +12,6 @@ public interface LeaveMapper {
     LeaveRequest toEntity(LeaveRequestDTO leaveRequestDTO);
 //    @Mapping(source = "requestId", target = "requestId")
 //    @Mapping(source = "user.userId", target = "userId")
+//    @Mapping(source = "managerComment", target = "managerComment")
     LeaveResponseDTO toDTO(LeaveRequest leaveRequest);
 }

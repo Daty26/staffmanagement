@@ -1,6 +1,7 @@
 package de.university.staffmanagement.controller;
 
 import de.university.staffmanagement.dto.request.LeaveRequestDTO;
+import de.university.staffmanagement.dto.request.LeaveStatusUpdateDTO;
 import de.university.staffmanagement.dto.request.UserRequestDTO;
 import de.university.staffmanagement.dto.response.LeaveResponseDTO;
 import de.university.staffmanagement.dto.response.ResponseWrapper;
@@ -54,7 +55,7 @@ public class LeaveController {
     }
 
     @PutMapping("/{id}/status")
-    public ResponseEntity<ResponseWrapper<LeaveResponseDTO>> updateStatus(@PathVariable Long id, @RequestParam Status status) {;
-        return new ResponseEntity<>(new ResponseWrapper<>(leaveService.updateStatus(id, status)), HttpStatus.OK);
+    public ResponseEntity<ResponseWrapper<LeaveResponseDTO>> updateStatus(@PathVariable Long id, @RequestBody LeaveStatusUpdateDTO updateDTO) {;
+        return new ResponseEntity<>(new ResponseWrapper<>(leaveService.updateStatus(id, updateDTO)), HttpStatus.OK);
     }
 }

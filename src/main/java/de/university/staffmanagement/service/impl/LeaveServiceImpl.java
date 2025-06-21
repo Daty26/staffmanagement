@@ -1,6 +1,7 @@
 package de.university.staffmanagement.service.impl;
 
 import de.university.staffmanagement.dto.request.LeaveRequestDTO;
+import de.university.staffmanagement.dto.request.LeaveStatusUpdateDTO;
 import de.university.staffmanagement.dto.request.NotificationRequestDTO;
 import de.university.staffmanagement.dto.response.LeaveResponseDTO;
 import de.university.staffmanagement.dto.response.NotificationResponseDTO;
@@ -78,15 +79,17 @@ public class LeaveServiceImpl implements LeaveService {
     }
 
     @Override
-    public LeaveResponseDTO updateStatus(Long id, Status newStatus) {
+    public LeaveResponseDTO updateStatus(Long id, LeaveStatusUpdateDTO leaveStatusUpdateDTO) {
         LeaveRequest leaveRequest = leaveRepository.findById(id).orElseThrow(() -> new GeneralException("The request is not found"));
+        System.out.println(leaveStatusUpdateDTO.getManagerComment());
+        leaveRequest.setStatus(leaveStatusUpdateDTO.getNewStatus());
+        leaveRequest.setManagerComment(leaveStatusUpdateDTO.getManagerComment());
 
-        leaveRequest.setStatus(newStatus);
-        LeaveRequest updatedRequest = leaveRepository.save(leaveRequest);
-        String msg = "Your request for " + leaveRequest.getLeaveType().toString().toLowerCase() + " has been " + newStatus.toString().toLowerCase();
+        leaveRepository.save(leaveRequest);
+        String msg = "Your request for " + leaveRequest.getLeaveType().toString().toLowerCase() + " has been " + leaveStatusUpdateDTO.getNewStatus().toString().toLowerCase();
         notificationService.sendNotification(leaveRequest.getUser().getUsername(), msg);
 
-        return leaveMapper.toDTO(updatedRequest);
+        return leaveMapper.toDTO(leaveRequest);
     }
 
     @Override

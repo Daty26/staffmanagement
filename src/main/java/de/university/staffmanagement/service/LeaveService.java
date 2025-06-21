@@ -1,6 +1,7 @@
 package de.university.staffmanagement.service;
 
 import de.university.staffmanagement.dto.request.LeaveRequestDTO;
+import de.university.staffmanagement.dto.request.LeaveStatusUpdateDTO;
 import de.university.staffmanagement.dto.response.LeaveResponseDTO;
 import de.university.staffmanagement.entity.LeaveRequest;
 import de.university.staffmanagement.entity.User;
@@ -13,7 +14,7 @@ public interface LeaveService {
     List<LeaveResponseDTO> getAll();
     LeaveResponseDTO getReqById(Long id);
     List<LeaveResponseDTO> getByStatus(Status status);
-    LeaveResponseDTO updateStatus(Long id, Status newStatus);
+    LeaveResponseDTO updateStatus(Long id, LeaveStatusUpdateDTO leaveStatusUpdateDTO);
     List<LeaveResponseDTO> getReqByUserId(Long userId);
 
 }

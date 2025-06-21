@@ -16,6 +16,7 @@ public class LeaveResponseDTO {
     private String endDate;
     private String reason;
     private Status status;
+    private String managerComment;
     @NotNull
     private String fullname;
 }
