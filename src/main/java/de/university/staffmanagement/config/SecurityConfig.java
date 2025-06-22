@@ -31,6 +31,7 @@ public class SecurityConfig {
     private final UserRepository userRepository;
 
     private final String[] WHITELISTED_ENDPOINTS = {
+            "/swagger-ui.html",
             "/swagger-ui/**",
             "/v3/api-docs/**",
             "/api/v1/login",

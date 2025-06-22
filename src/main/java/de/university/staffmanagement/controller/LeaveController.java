@@ -39,8 +39,8 @@ public class LeaveController {
         return new ResponseEntity<>(new ResponseWrapper<>(leaveService.getAll()), HttpStatus.OK);
     }
     @GetMapping("/user")
-    public ResponseEntity<ResponseWrapper<List<LeaveResponseDTO>>> getRequestsByUserId(@PathVariable Long userId) {
-        return new ResponseEntity<>(new ResponseWrapper<>(leaveService.getReqByUserId(userId)), HttpStatus.OK);
+    public ResponseEntity<ResponseWrapper<List<LeaveResponseDTO>>> getRequestsByUserId(@AuthenticationPrincipal User user) {
+        return new ResponseEntity<>(new ResponseWrapper<>(leaveService.getReqByUserId(user.getUserId())), HttpStatus.OK);
     }
 
 
