@@ -42,6 +42,7 @@ public class LeaveController {
 //        System.out.println(response);
         return new ResponseEntity<>(new ResponseWrapper<>(response), HttpStatus.CREATED);
     }
+    @SecurityRequirement(name = "JWT")
     @Operation(
             summary = "Get all leave requests",
             description = "Retrieve all leave requests in the system"
@@ -73,14 +74,15 @@ public class LeaveController {
             summary = "Get leave requests by status",
             description = "Retrieve leave requests based on their current status"
     )
+    @SecurityRequirement(name = "JWT")
     @Parameter(
             name = "status",
             description = "Leave request status (e.g. PENDING, APPROVED, REJECTED)",
             required = true
     )
     @GetMapping("/status/{status}")
-    public ResponseEntity<ResponseWrapper<List<LeaveResponseDTO>>> getLeaveRequestsByStatus(@PathVariable Status status) {
-        return new ResponseEntity<>(new ResponseWrapper<>(leaveService.getByStatus(status)), HttpStatus.OK);
+    public ResponseEntity<ResponseWrapper<List<LeaveResponseDTO>>> getLeaveRequestsByStatus(@PathVariable Status status, @AuthenticationPrincipal User user) {
+        return new ResponseEntity<>(new ResponseWrapper<>(leaveService.getByStatus(status, user.getUserId())), HttpStatus.OK);
     }
 
     @Operation(

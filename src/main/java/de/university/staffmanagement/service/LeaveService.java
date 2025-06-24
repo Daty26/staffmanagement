@@ -13,7 +13,7 @@ public interface LeaveService {
     LeaveResponseDTO create(LeaveRequestDTO leaveRequestDTO, User user);
     List<LeaveResponseDTO> getAll();
     LeaveResponseDTO getReqById(Long id);
-    List<LeaveResponseDTO> getByStatus(Status status);
+    List<LeaveResponseDTO> getByStatus(Status status, Long userId);
     LeaveResponseDTO updateStatus(Long id, LeaveStatusUpdateDTO leaveStatusUpdateDTO);
     List<LeaveResponseDTO> getReqByUserId(Long userId);
 

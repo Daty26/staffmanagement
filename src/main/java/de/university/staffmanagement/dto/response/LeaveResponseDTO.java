@@ -18,5 +18,5 @@ public class LeaveResponseDTO {
     private Status status;
     private String managerComment;
     @NotNull
-    private String fullname;
+    private String username;
 }

@@ -70,9 +70,9 @@ public class LeaveServiceImpl implements LeaveService {
 
 
     @Override
-    public List<LeaveResponseDTO> getByStatus(Status status) {
-        List<LeaveRequest> leaveRequests = leaveRepository.findByStatus(status);
-
+    public List<LeaveResponseDTO> getByStatus(Status status, Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User Id not found"));
+        List<LeaveRequest> leaveRequests = leaveRepository.findByStatusAndUser(status, user);
         return leaveRequests.stream()
                 .map(leaveMapper::toDTO)
                 .collect(Collectors.toList());
@@ -97,17 +97,18 @@ public class LeaveServiceImpl implements LeaveService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new GeneralException("User with this id was not found"));
 
-        PersonalInfo personalInfo = personalInfoRepository.findByUser(user)
-                .orElseThrow(() -> new RuntimeException("Personal info was not found for this user"));
+//        PersonalInfo personalInfo = personalInfoRepository.findByUser(user)
+//                .orElseThrow(() -> new RuntimeException("Personal info was not found for this user"));
 
 
 
         List<LeaveRequest> leaveRequests = leaveRepository.findByUser(user);
+//        LleaveRequests
 
         return leaveRequests.stream()
                 .map(leaveRequest -> {
                     LeaveResponseDTO dto = leaveMapper.toDTO(leaveRequest);
-                    dto.setFullname(personalInfo.getFullName());
+                    dto.setUsername(leaveRequest.getUser().getUsername());
                     return dto;
                 })
                 .collect(Collectors.toList());
