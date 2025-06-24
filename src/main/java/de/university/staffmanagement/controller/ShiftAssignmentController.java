@@ -19,6 +19,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/shift")
+@SecurityRequirement(name = "JWT")
 @Tag(name = "Controller for managing shift assignments")
 public class ShiftAssignmentController {
     ShiftAssignmentService shiftAssignmentService;
@@ -48,7 +49,6 @@ public class ShiftAssignmentController {
             summary = "Get user shift assignments",
             description = "Retrieve shift assignments for the authenticated user"
     )
-    @SecurityRequirement(name = "JWT")
     @GetMapping("/user")
     public ResponseEntity<ResponseWrapper<List<ShiftAssignmentResponse>>> getByUser(@AuthenticationPrincipal User user) {
         return new ResponseEntity<>(new ResponseWrapper<>(shiftAssignmentService.getByUserId(user.getUserId())), HttpStatus.OK);

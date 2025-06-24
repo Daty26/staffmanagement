@@ -108,7 +108,8 @@ public class LeaveServiceImpl implements LeaveService {
         return leaveRequests.stream()
                 .map(leaveRequest -> {
                     LeaveResponseDTO dto = leaveMapper.toDTO(leaveRequest);
-                    dto.setUsername(leaveRequest.getUser().getUsername());
+                    dto.setUsername("");
+                    System.out.println(dto.getUsername());
                     return dto;
                 })
                 .collect(Collectors.toList());
