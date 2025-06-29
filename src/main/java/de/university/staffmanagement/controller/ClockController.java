@@ -43,6 +43,7 @@ public class ClockController {
             description = "Returns a list of all clock-in/out entries in the system"
     )
     @GetMapping
+    @SecurityRequirement(name = "JWT")
     public ResponseEntity<ResponseWrapper<List<ClockResponseDTO>>> getAllClockEntries() {
         return new ResponseEntity<>(new ResponseWrapper<>(clockService.getAll()), HttpStatus.OK);
     }
