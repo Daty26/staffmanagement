@@ -23,10 +23,10 @@ public class LeaveRequest {
     private LeaveType leaveType;
 
     @Column(nullable = false)
-    private String startDate;
+    private LocalDate startDate;
 
     @Column(nullable = false)
-    private String endDate;
+    private LocalDate endDate;
 
     private String reason;
 
