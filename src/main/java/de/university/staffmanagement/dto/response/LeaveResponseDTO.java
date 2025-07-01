@@ -12,8 +12,8 @@ import java.time.LocalDate;
 public class LeaveResponseDTO {
     private Long requestId;
     private LeaveType leaveType;
-    private String startDate;
-    private String endDate;
+    private LocalDate startDate;
+    private LocalDate endDate;
     private String reason;
     private Status status;
     private String managerComment;
