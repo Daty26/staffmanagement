@@ -2,10 +2,8 @@ package de.university.staffmanagement.controller;
 
 import de.university.staffmanagement.dto.request.LeaveRequestDTO;
 import de.university.staffmanagement.dto.request.LeaveStatusUpdateDTO;
-import de.university.staffmanagement.dto.request.UserRequestDTO;
 import de.university.staffmanagement.dto.response.LeaveResponseDTO;
 import de.university.staffmanagement.dto.response.ResponseWrapper;
-import de.university.staffmanagement.dto.response.UserResponseDTO;
 import de.university.staffmanagement.entity.User;
 import de.university.staffmanagement.enums.Status;
 import de.university.staffmanagement.service.LeaveService;
@@ -13,7 +11,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -86,7 +83,7 @@ public class LeaveController {
             required = true
     )
     @GetMapping("/status/{status}")
-    @PreAuthorize("hasRole('MANAGER')")
+    @PreAuthorize("hasAnyRole('MANAGER', 'EMPLOYEE')")
     public ResponseEntity<ResponseWrapper<List<LeaveResponseDTO>>> getLeaveRequestsByStatus(@PathVariable Status status, @AuthenticationPrincipal User user) {
         return new ResponseEntity<>(new ResponseWrapper<>(leaveService.getByStatus(status, user.getUserId())), HttpStatus.OK);
     }
@@ -102,7 +99,7 @@ public class LeaveController {
     )
     @PutMapping("/{id}/status")
     @PreAuthorize("hasAnyRole('MANAGER', 'EMPLOYEE')")
-    public ResponseEntity<ResponseWrapper<LeaveResponseDTO>> updateStatus(@PathVariable Long id, @RequestBody LeaveStatusUpdateDTO updateDTO) {;
+    public ResponseEntity<ResponseWrapper<LeaveResponseDTO>> updateStatus(@PathVariable Long id, @RequestBody LeaveStatusUpdateDTO updateDTO) {
         return new ResponseEntity<>(new ResponseWrapper<>(leaveService.updateStatus(id, updateDTO)), HttpStatus.OK);
     }
 }
