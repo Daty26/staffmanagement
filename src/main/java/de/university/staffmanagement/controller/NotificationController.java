@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,6 +34,7 @@ public class NotificationController {
             description = "Create and send a new notification"
     )
     @PostMapping
+    @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<ResponseWrapper<NotificationResponseDTO>> sendNotification(@RequestBody NotificationRequestDTO notificationRequestDTO) {
         return new ResponseEntity<>(new ResponseWrapper<>(notificationService.sendNotification(notificationRequestDTO)), HttpStatus.CREATED);
     }
@@ -41,6 +43,7 @@ public class NotificationController {
             description = "Delete a notification by its ID"
     )
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<ResponseWrapper<Void>> deleteNotification(@PathVariable Long id) {
         notificationService.deleteNotification(id);
 //        return ResponseEntity.noContent().build();
@@ -52,6 +55,7 @@ public class NotificationController {
     )
     @SecurityRequirement(name = "JWT")
     @GetMapping("/user")
+    @PreAuthorize("hasAnyRole('MANAGER', 'EMPLOYEE')")
     public ResponseEntity<ResponseWrapper<List<NotificationResponseDTO>>> getNotificationsByUserId(@AuthenticationPrincipal User user) {
         return new ResponseEntity<>(new ResponseWrapper<>( notificationService.getNotificationByUserId(user.getUserId())), HttpStatus.OK);
     }
@@ -59,6 +63,7 @@ public class NotificationController {
             summary = "Get all notifications",
             description = "Retrieve all notifications in the system")
     @GetMapping
+    @PreAuthorize("hasAnyRole('MANAGER', 'EMPLOYEE')")
     public ResponseEntity<ResponseWrapper<List<NotificationResponseDTO>>> getAllNotifications() {
         List<NotificationResponseDTO> notifications = notificationService.getAll();
         return new ResponseEntity<>(new ResponseWrapper<>(notifications), HttpStatus.OK);

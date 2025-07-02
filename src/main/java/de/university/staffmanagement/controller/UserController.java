@@ -33,7 +33,7 @@ public class UserController {
     @Operation(
             summary = "Creating user"
     )
-//    @PreAuthorize("hasAuthority('MANAGER')")
+    @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<ResponseWrapper<UserResponseDTO>> createUser(@RequestBody UserRequestDTO userRequestDTO) {
         return new ResponseEntity<>(new ResponseWrapper<>(userService.create(userRequestDTO)), HttpStatus.CREATED);
     }
@@ -43,6 +43,7 @@ public class UserController {
             summary = "Updating user"
     )
     @SecurityRequirement(name = "JWT")
+    @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<ResponseWrapper<UserResponseDTO>> updateUser(@RequestParam String username,
                                                       @RequestParam String email,
                                                       @AuthenticationPrincipal User user) {
@@ -54,6 +55,7 @@ public class UserController {
             summary = "Getting user by id"
     )
     @SecurityRequirement(name = "JWT")
+    @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<ResponseWrapper<UserResponseDTO>> getUserById(@PathVariable Long id) {
         return new ResponseEntity<>(new ResponseWrapper<>(userService.get(id)), HttpStatus.OK);
     }
@@ -63,6 +65,7 @@ public class UserController {
             summary = "Getting all users"
     )
     @SecurityRequirement(name = "JWT")
+    @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<ResponseWrapper<List<UserResponseDTO>>> getAllUsers() {
         return new ResponseEntity<>(new ResponseWrapper<>(userService.getAll()), HttpStatus.OK);
     }
