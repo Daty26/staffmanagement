@@ -7,6 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.security.access.prepost.PreAuthorize;
+
 
 import java.util.List;
 
@@ -20,6 +22,7 @@ public class EmployeeLogsController {
     }
 
     @PostMapping("/logs")
+    @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<List<EmployeeResponseDTO>> getWeeklyOverview(
             @RequestBody EmployeeRequestDTO request) {
 

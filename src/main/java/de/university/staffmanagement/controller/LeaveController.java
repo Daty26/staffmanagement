@@ -16,6 +16,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,6 +38,7 @@ public class LeaveController {
     )
     @SecurityRequirement(name = "JWT")
     @PostMapping
+    @PreAuthorize("hasRole('EMPLOYEE')")
     public ResponseEntity<ResponseWrapper<LeaveResponseDTO>> createRequest(@RequestBody LeaveRequestDTO leaveRequestDTO, @AuthenticationPrincipal User user ) {
         LeaveResponseDTO response = leaveService.create(leaveRequestDTO, user);
 //        System.out.println(response);
@@ -48,6 +50,7 @@ public class LeaveController {
             description = "Retrieve all leave requests in the system"
     )
     @GetMapping
+    @PreAuthorize("hasAnyRole('MANAGER', 'EMPLOYEE')")
     public ResponseEntity<ResponseWrapper<List<LeaveResponseDTO>>> getAllRequests() {
         return new ResponseEntity<>(new ResponseWrapper<>(leaveService.getAll()), HttpStatus.OK);
     }
@@ -57,6 +60,7 @@ public class LeaveController {
     )
     @SecurityRequirement(name = "JWT")
     @GetMapping("/user")
+    @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<ResponseWrapper<List<LeaveResponseDTO>>> getRequestsByUserId(@AuthenticationPrincipal User user) {
         return new ResponseEntity<>(new ResponseWrapper<>(leaveService.getReqByUserId(user.getUserId())), HttpStatus.OK);
     }
@@ -66,6 +70,7 @@ public class LeaveController {
             description = "Retrieve a specific leave request by its ID"
     )
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<ResponseWrapper<LeaveResponseDTO>> getRequestById(@PathVariable Long id) {
         return new ResponseEntity<>(new ResponseWrapper<>(leaveService.getReqById(id)), HttpStatus.OK);
     }
@@ -81,6 +86,7 @@ public class LeaveController {
             required = true
     )
     @GetMapping("/status/{status}")
+    @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<ResponseWrapper<List<LeaveResponseDTO>>> getLeaveRequestsByStatus(@PathVariable Status status, @AuthenticationPrincipal User user) {
         return new ResponseEntity<>(new ResponseWrapper<>(leaveService.getByStatus(status, user.getUserId())), HttpStatus.OK);
     }
@@ -95,6 +101,7 @@ public class LeaveController {
             required = true
     )
     @PutMapping("/{id}/status")
+    @PreAuthorize("hasAnyRole('MANAGER', 'EMPLOYEE')")
     public ResponseEntity<ResponseWrapper<LeaveResponseDTO>> updateStatus(@PathVariable Long id, @RequestBody LeaveStatusUpdateDTO updateDTO) {;
         return new ResponseEntity<>(new ResponseWrapper<>(leaveService.updateStatus(id, updateDTO)), HttpStatus.OK);
     }

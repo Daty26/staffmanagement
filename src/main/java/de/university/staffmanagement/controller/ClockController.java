@@ -3,7 +3,7 @@ package de.university.staffmanagement.controller;
 import de.university.staffmanagement.dto.request.ClockInRequestDTO;
 import de.university.staffmanagement.dto.request.ClockOutRequestDTO;
 import de.university.staffmanagement.dto.response.ClockResponseDTO;
-import de.university.staffmanagement.dto.response.LeaveResponseDTO;
+import org.springframework.security.access.prepost.PreAuthorize;
 import de.university.staffmanagement.dto.response.ResponseWrapper;
 import de.university.staffmanagement.entity.User;
 import de.university.staffmanagement.service.ClockService;
@@ -23,11 +23,14 @@ import java.util.List;
 @Tag(name = "Controller for managing clock-in / clock-out")
 
 public class ClockController {
+
     private final ClockService clockService;
+
     @Autowired
     public ClockController(ClockService clockService) {
         this.clockService = clockService;
     }
+
     @Operation(
             summary = "Get clock entries for current user",
             description = "Returns a list of clock-in/out entries for the authenticated user")
@@ -44,6 +47,7 @@ public class ClockController {
     )
     @GetMapping
     @SecurityRequirement(name = "JWT")
+    @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<ResponseWrapper<List<ClockResponseDTO>>> getAllClockEntries() {
         return new ResponseEntity<>(new ResponseWrapper<>(clockService.getAll()), HttpStatus.OK);
     }

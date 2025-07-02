@@ -16,6 +16,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
+
 
 import java.util.List;
 
@@ -35,6 +37,7 @@ public class PersonalInfoController {
             description = "Update personal information for the authenticated user")
     @SecurityRequirement(name = "JWT")
     @PutMapping("/updatePersonalInfo")
+    @PreAuthorize("hasAnyRole('MANAGER', 'EMPLOYEE')")
     public ResponseEntity<ResponseWrapper<PersonalInfoResponseDTO>> updatePersonalInfo(@RequestBody PersonalInfoRequestDTO personalInfoRequestDTO,@AuthenticationPrincipal User user) {
         return new ResponseEntity<>(new ResponseWrapper<>(personalInfoService.update(personalInfoRequestDTO, user)), HttpStatus.CREATED);
     }
@@ -44,6 +47,7 @@ public class PersonalInfoController {
     )
     @SecurityRequirement(name = "JWT")
     @GetMapping("/user")
+    @PreAuthorize("hasAnyRole('MANAGER')")
     public ResponseEntity<ResponseWrapper<PersonalInfoResponseDTO>> getUserById(@AuthenticationPrincipal User user) {
         return new ResponseEntity<>(new ResponseWrapper<>(personalInfoService.get(user)), HttpStatus.OK);
     }
@@ -52,6 +56,7 @@ public class PersonalInfoController {
             description = "Retrieve personal information for all users"
     )
     @GetMapping
+    @PreAuthorize("hasAnyRole('MANAGER')")
     public ResponseEntity<ResponseWrapper<List<PersonalInfoResponseDTO>>> getAllUsers() {
         return new ResponseEntity<>(new ResponseWrapper<>(personalInfoService.getAll()), HttpStatus.OK);
     }

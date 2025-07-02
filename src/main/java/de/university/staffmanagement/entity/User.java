@@ -36,8 +36,9 @@ public class User implements UserDetails{
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(getRole().name()));
+        return List.of(new SimpleGrantedAuthority("ROLE_" + getRole().name()));
     }
+
     @Override
     public boolean isAccountNonExpired() {
         return true;
