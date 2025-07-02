@@ -2,6 +2,7 @@ package de.university.staffmanagement.config;
 
 import de.university.staffmanagement.repository.UserRepository;
 import de.university.staffmanagement.service.impl.UserDetailsServiceImpl;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -61,6 +62,7 @@ public class SecurityConfig {
 
         return http.build();
     }
+
 
     @Bean
     public PasswordEncoder passwordEncoder() {
