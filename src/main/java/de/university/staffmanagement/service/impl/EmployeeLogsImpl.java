@@ -48,10 +48,8 @@ public class EmployeeLogsImpl implements EmployeeLogsService {
     }
 
     @Override
-    public List<EmployeeResponseDTO> getWeeklyOverview(EmployeeRequestDTO request) {
-        LocalDate weekStart = request.getWeekStart();
+    public List<EmployeeResponseDTO> getWeeklyOverview(Long userId, LocalDate weekStart) {
         LocalDate weekEnd = weekStart.plusDays(6);
-        Long userId = request.getUserId();
 
         User user = this.userRepository.findById(userId)
                 .orElseThrow(() -> new GeneralException("User not found"));
@@ -66,7 +64,11 @@ public class EmployeeLogsImpl implements EmployeeLogsService {
                 .findApprovedByUserAndDateRange(user, weekStart, weekEnd);
 
         Map<LocalDate, ClockEntry> clockMap = clockEntries.stream()
-                .collect(Collectors.toMap(e -> e.getClockInTime().toLocalDate(), e -> e));
+                .collect(Collectors.toMap(
+                        entry -> entry.getClockInTime().toLocalDate(),
+                        entry -> entry,
+                        (existing, replacement) -> existing // or replacement
+                ));
 
         Map<LocalDate, ShiftAssignment> shiftMap = shifts.stream()
                 .collect(Collectors.toMap(ShiftAssignment::getShiftDate, s -> s));

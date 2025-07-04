@@ -1,19 +1,22 @@
 package de.university.staffmanagement.controller;
 
-import de.university.staffmanagement.dto.request.EmployeeRequestDTO;
 import de.university.staffmanagement.dto.response.EmployeeResponseDTO;
+import de.university.staffmanagement.dto.response.ResponseWrapper;
 import de.university.staffmanagement.service.EmployeeLogsService;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 
+import java.time.LocalDate;
 import java.util.List;
 
-@Controller
+@RequestMapping("/api/v1/logs")
+@RestController
+@Tag(name = "Controller for viewing employee logs")
 public class EmployeeLogsController {
 
     private final EmployeeLogsService employeeLogsService;
@@ -22,12 +25,14 @@ public class EmployeeLogsController {
         this.employeeLogsService = employeeLogsService;
     }
 
-    @GetMapping("/logs")
+    @GetMapping
     @PreAuthorize("hasRole('MANAGER')")
-    public ResponseEntity<List<EmployeeResponseDTO>> getWeeklyOverview(
-            @RequestBody EmployeeRequestDTO request) {
+    public ResponseEntity<ResponseWrapper<List<EmployeeResponseDTO>>> getWeeklyOverview(
 
-        List<EmployeeResponseDTO> overview = employeeLogsService.getWeeklyOverview(request);
-        return ResponseEntity.ok(overview);
+            @RequestParam Long userId,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate weekStart) {
+
+        return  new ResponseEntity<>(new ResponseWrapper<>( employeeLogsService.getWeeklyOverview(userId, weekStart)), HttpStatus.OK);
+//        return ResponseEntity.ok(overview);
     }
 }
