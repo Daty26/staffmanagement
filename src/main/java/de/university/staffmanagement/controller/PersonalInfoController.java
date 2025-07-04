@@ -47,7 +47,7 @@ public class PersonalInfoController {
     )
     @SecurityRequirement(name = "JWT")
     @GetMapping("/user")
-    @PreAuthorize("hasAnyRole('MANAGER')")
+    @PreAuthorize("hasAnyRole('MANAGER', 'EMPLOYEE')")
     public ResponseEntity<ResponseWrapper<PersonalInfoResponseDTO>> getUserById(@AuthenticationPrincipal User user) {
         return new ResponseEntity<>(new ResponseWrapper<>(personalInfoService.get(user)), HttpStatus.OK);
     }
@@ -56,7 +56,7 @@ public class PersonalInfoController {
             description = "Retrieve personal information for all users"
     )
     @GetMapping
-    @PreAuthorize("hasAnyRole('MANAGER')")
+    @PreAuthorize("hasAnyRole('MANAGER', 'EMPLOYEE')")
     public ResponseEntity<ResponseWrapper<List<PersonalInfoResponseDTO>>> getAllUsers() {
         return new ResponseEntity<>(new ResponseWrapper<>(personalInfoService.getAll()), HttpStatus.OK);
     }

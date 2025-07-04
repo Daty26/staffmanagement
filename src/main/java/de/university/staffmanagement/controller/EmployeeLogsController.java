@@ -5,6 +5,7 @@ import de.university.staffmanagement.dto.response.EmployeeResponseDTO;
 import de.university.staffmanagement.service.EmployeeLogsService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -21,7 +22,7 @@ public class EmployeeLogsController {
         this.employeeLogsService = employeeLogsService;
     }
 
-    @PostMapping("/logs")
+    @GetMapping("/logs")
     @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<List<EmployeeResponseDTO>> getWeeklyOverview(
             @RequestBody EmployeeRequestDTO request) {
