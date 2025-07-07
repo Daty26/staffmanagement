@@ -1,0 +1,12 @@
+de.university.staffmanagement
+de.university.staffmanagement.config
+de.university.staffmanagement.controller
+de.university.staffmanagement.dto.request
+de.university.staffmanagement.dto.response
+de.university.staffmanagement.entity
+de.university.staffmanagement.enums
+de.university.staffmanagement.exception
+de.university.staffmanagement.mapper
+de.university.staffmanagement.repository
+de.university.staffmanagement.service
+de.university.staffmanagement.service.impl

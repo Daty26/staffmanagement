@@ -23,6 +23,13 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 
+
+/**
+ * Configuration class for Spring Security.
+ *
+ * <p>This class sets up endpoint security, JWT authentication, password encoding,
+ * and custom user authentication logic for the Staff Management System.
+ */
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
@@ -31,6 +38,9 @@ public class SecurityConfig {
     private final JwtAuthFilter jwtAuthFilter;
     private final UserRepository userRepository;
 
+    /**
+     * List of endpoints that do not require authentication.
+     */
     private final String[] WHITELISTED_ENDPOINTS = {
             "/swagger-ui.html",
             "/swagger-ui/**",
@@ -40,11 +50,23 @@ public class SecurityConfig {
             "/api/v1/users",
     };
 
+    /**
+     * Configures a custom {@link UserDetailsService} using the application's user repository.
+     *
+     * @return the user details service implementation
+     */
     @Bean
     public UserDetailsService userDetailsService() {
         return new UserDetailsServiceImpl(userRepository);
     }
 
+    /**
+     * Defines the security filter chain configuration.
+     *
+     * @param http the HTTP security builder
+     * @return the security filter chain
+     * @throws Exception in case of configuration error
+     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
@@ -63,12 +85,21 @@ public class SecurityConfig {
         return http.build();
     }
 
-
+    /**
+     * Provides the password encoder using BCrypt.
+     *
+     * @return the password encoder
+     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+    /**
+     * Configures the authentication provider with custom user details and password encoder.
+     *
+     * @return the authentication provider
+     */
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
@@ -78,6 +109,13 @@ public class SecurityConfig {
 
     }
 
+    /**
+     * Provides the {@link AuthenticationManager} used for authentication processing.
+     *
+     * @param config the authentication configuration provided by Spring Boot
+     * @return the authentication manager
+     * @throws Exception if the manager cannot be obtained
+     */
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();

@@ -6,6 +6,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * DTO returned after successful authentication.
+ *
+ * <p>Contains both access and refresh tokens used for securing API requests.
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

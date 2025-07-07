@@ -11,12 +11,28 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 
+/**
+ * Custom implementation of {@link org.springframework.security.core.userdetails.UserDetailsService}
+ * used by Spring Security for user authentication.
+ *
+ * <p>This class loads user details by username during login and integrates with Spring Security.
+ *
+ * <p>It relies on the {@link UserRepository} to retrieve user data and returns a {@link User}
+ * entity that implements {@link UserDetails}.
+ */
 @Component
 @RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
     private final UserRepository userRepository;
     private static final Logger logger = LoggerFactory.getLogger(UserDetailsServiceImpl.class);
 
+    /**
+     * Loads the user details by username for authentication.
+     *
+     * @param username the username entered by the user during login
+     * @return the authenticated user as a {@link UserDetails} object
+     * @throws UsernameNotFoundException if no user is found with the provided username
+     */
     @Override
     public UserDetails loadUserByUsername(String username) {
 

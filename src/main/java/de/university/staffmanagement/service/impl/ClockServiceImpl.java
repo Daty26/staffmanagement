@@ -15,6 +15,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Handles clock-in and clock-out operations and provides clock entry data.
+ */
 @Service
 public class ClockServiceImpl implements ClockService {
     private final ClockEntryRepository clockEntryRepository;
@@ -25,6 +28,16 @@ public class ClockServiceImpl implements ClockService {
         this.clockMapper = clockMapper;
         this.userRepository = userRepository;
     }
+    /**
+     * Records a clock-in time for the authenticated user.
+     *
+     * <p>Ensures the user is not already clocked in.
+     *
+     * @param clockInRequestDTO DTO containing the clock-in time
+     * @param authenticatedUser the user who is clocking in
+     * @return a {@link ClockResponseDTO} containing the recorded clock-in entry
+     * @throws GeneralException if the user is already clocked in
+     */
     @Override
     public ClockResponseDTO clockIn(ClockInRequestDTO clockInRequestDTO, User authenticatedUser) {
 
@@ -38,6 +51,16 @@ public class ClockServiceImpl implements ClockService {
         return clockMapper.toDTO(clockEntry);
     }
 
+    /**
+     * Records a clock-out time for the authenticated user.
+     *
+     * <p>Validates that the user has a pending clock-in and has worked at least one hour.
+     *
+     * @param clockOutRequestDTO DTO containing the clock-out time
+     * @param authenticatedUser the user who is clocking out
+     * @return a {@link ClockResponseDTO} with the completed clock-in/out entry
+     * @throws GeneralException if the user hasn't clocked in or has worked less than an hour
+     */
     @Override
     public ClockResponseDTO clockOut(ClockOutRequestDTO clockOutRequestDTO, User authenticatedUser) {
         //work on this method down bellow
@@ -57,7 +80,12 @@ public class ClockServiceImpl implements ClockService {
         clockEntryRepository.save(clockEntry);
         return clockMapper.toDTO(clockEntry);
     }
-
+    /**
+     * Retrieves all clock entries for a specific user.
+     *
+     * @param user the user whose entries to retrieve
+     * @return a list of {@link ClockResponseDTO} objects
+     */
     @Override
     public List<ClockResponseDTO> getEntryByUser(User user) {
         List<ClockEntry> clockEntries = clockEntryRepository.findByUser_UserId(user.getUserId());
@@ -66,7 +94,11 @@ public class ClockServiceImpl implements ClockService {
                 .collect(Collectors.toList());
     }
 
-
+    /**
+     * Retrieves all clock entries in the system.
+     *
+     * @return a list of all {@link ClockResponseDTO} objects
+     */
     @Override
     public List<ClockResponseDTO> getAll() {
         return clockEntryRepository.findAll()

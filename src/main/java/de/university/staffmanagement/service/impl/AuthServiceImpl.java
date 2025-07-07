@@ -19,6 +19,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 
+/**
+ * Service implementation for handling authentication and JWT token management.
+ *
+ * <p>This class provides logic for user login and refreshing JWT access tokens using refresh tokens.
+ */
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
@@ -29,6 +34,13 @@ public class AuthServiceImpl implements AuthService {
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
 
+    /**
+     * Authenticates a user using the provided credentials and returns a pair of access and refresh tokens.
+     *
+     * @param authRequestDTO contains the username and password
+     * @return an {@link AuthResponseDTO} containing the generated JWT access token and refresh token
+     * @throws UsernameNotFoundException if authentication fails or user is not found
+     */
     @Override
     public AuthResponseDTO authenticate(AuthRequestDTO authRequestDTO) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequestDTO.getUsername(), authRequestDTO.getPassword()));
@@ -45,6 +57,13 @@ public class AuthServiceImpl implements AuthService {
         }
     }
 
+    /**
+     * Generates a new access token using a valid refresh token.
+     *
+     * @param refreshTokenRequestDTO contains the refresh token
+     * @return an {@link AuthResponseDTO} containing the new JWT access token and the same refresh token
+     * @throws RuntimeException if the refresh token is not found or is expired
+     */
     @Override
     public AuthResponseDTO refreshToken(RefreshTokenRequestDTO refreshTokenRequestDTO) {
         return refreshTokenService.findByToken(refreshTokenRequestDTO.getToken())

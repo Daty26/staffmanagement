@@ -6,6 +6,11 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 
+/**
+ * Entity representing additional personal information for a user.
+ *
+ * <p>Includes full name, contact details, birth date, and a reference to the associated user.
+ */
 @Entity
 @Getter
 @Setter

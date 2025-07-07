@@ -28,6 +28,24 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 
+/**
+ * Service implementation for generating employee weekly attendance logs.
+ *
+ * <p>This service aggregates data from:
+ * <ul>
+ *     <li>{@link ClockEntry} - employee clock-in/out records</li>
+ *     <li>{@link ShiftAssignment} - scheduled shifts</li>
+ *     <li>{@link LeaveRequest} - approved leave requests</li>
+ * </ul>
+ *
+ * <p>It provides managers with a daily breakdown of an employee’s attendance status,
+ * total hours worked, overtime, and leave status across a given week.
+ *
+ * <p>Used in manager views for analyzing staff attendance and performance.
+ *
+ * @see EmployeeResponseDTO
+ * @see EmployeeLogsService
+ */
 @Service
 public class EmployeeLogsImpl implements EmployeeLogsService {
 
@@ -46,7 +64,24 @@ public class EmployeeLogsImpl implements EmployeeLogsService {
         this.shiftAssignmentRepository = shiftAssignmentRepository;
         this.leaveRepository = leaveRepository;
     }
-
+    /**
+     * Generates a weekly overview of an employee’s attendance status, working hours,
+     * and shift information based on clock-in/out entries, shift assignments, and approved leaves.
+     *
+     * <p>The result contains 7 days starting from {@code weekStart}, and determines for each day:
+     * <ul>
+     *     <li>Clock-in/out times (if present)</li>
+     *     <li>Expected working hours (from shift assignment)</li>
+     *     <li>Actual worked hours</li>
+     *     <li>Overtime (if any)</li>
+     *     <li>Attendance status: REGULAR, ON_LEAVE, ABSENT, INSUFFICIENT</li>
+     * </ul>
+     *
+     * @param userId the ID of the user (employee) whose weekly logs are being requested
+     * @param weekStart the starting date of the week (usually a Monday)
+     * @return a list of {@link EmployeeResponseDTO} objects, one for each day of the specified week
+     * @throws GeneralException if the user with the given ID does not exist
+     */
     @Override
     public List<EmployeeResponseDTO> getWeeklyOverview(Long userId, LocalDate weekStart) {
         LocalDate weekEnd = weekStart.plusDays(6);

@@ -6,6 +6,11 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 
+/**
+ * DTO representing a notification sent to a user.
+ *
+ * <p>Includes the notification message, timestamp, read status, and recipient username.
+ */
 @Data
 public class NotificationResponseDTO {
     private Long notificationId;

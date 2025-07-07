@@ -7,6 +7,11 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
+/**
+ * DTO representing a daily summary of an employee's attendance.
+ *
+ * <p>Includes date, working hours, overtime, total time, and attendance status.
+ */
 @Data
 public class EmployeeResponseDTO {
     private LocalDate date;

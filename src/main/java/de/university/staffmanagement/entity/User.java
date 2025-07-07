@@ -12,6 +12,12 @@ import lombok.Setter;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * Entity representing an authenticated user in the system.
+ *
+ * <p>Implements Spring Security's {@link UserDetails} to support authentication and authorization.
+ * Includes username, email, password, and role, all persisted in the "users" table.
+ */
 @Entity
 @Setter
 @Getter
@@ -34,6 +40,9 @@ public class User implements UserDetails{
     @Column(nullable = false)
     private Role role;
 
+    /**
+     * Returns the user's granted authorities based on their role.
+     */
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority("ROLE_" + getRole().name()));

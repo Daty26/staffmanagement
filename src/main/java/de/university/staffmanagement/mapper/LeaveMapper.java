@@ -6,13 +6,28 @@ import de.university.staffmanagement.entity.LeaveRequest;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+/**
+ * Mapper interface for converting between {@link LeaveRequest} entities and their corresponding DTOs.
+ *
+ * <p>Used to map leave request data between internal entity representation and external-facing DTOs.
+ */
 @Mapper(componentModel = "spring")
 public interface LeaveMapper {
-//    @Mapping(source = "userId", target = "user.userId")
+    /**
+     * Converts a {@link LeaveRequestDTO} to a {@link LeaveRequest} entity.
+     *
+     * @param leaveRequestDTO the DTO containing leave request details
+     * @return the mapped LeaveRequest entity
+     */
     LeaveRequest toEntity(LeaveRequestDTO leaveRequestDTO);
-//    @Mapping(source = "requestId", target = "requestId")
-//    @Mapping(source = "user.userId", target = "userId")
+    /**
+     * Converts a {@link LeaveRequest} entity to a {@link LeaveResponseDTO}.
+     *
+     * <p>Includes user’s username as {@code userName} in the response DTO.
+     *
+     * @param leaveRequest the leave request entity
+     * @return the mapped LeaveResponseDTO
+     */
     @Mapping(source = "user.username", target = "userName")
-//    @Mapping(source = "managerComment", target = "managerComment")
     LeaveResponseDTO toDTO(LeaveRequest leaveRequest);
 }

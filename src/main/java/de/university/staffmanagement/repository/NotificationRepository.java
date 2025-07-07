@@ -9,8 +9,19 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+/**
+ * Repository interface for accessing {@link Notification} entities.
+ *
+ * <p>Provides methods to retrieve notifications by user.
+ */
 @Repository
 public interface NotificationRepository extends JpaRepository<Notification, Long> {
+    /**
+     * Finds all notifications sent to a specific user.
+     *
+     * @param user the recipient user
+     * @return list of notifications for the given user
+     */
     List<Notification> findByUser(User user);
 
 }

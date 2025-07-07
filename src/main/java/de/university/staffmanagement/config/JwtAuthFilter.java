@@ -18,6 +18,14 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
+/**
+ * Security filter for JWT-based authentication.
+ *
+ * <p>Intercepts every incoming HTTP request and extracts a JWT token from the Authorization header.
+ * If valid, the user is authenticated and added to the Spring Security context.
+ *
+ * <p>Skips filtering for login, token refresh, user registration, and Swagger endpoints.
+ */
 @Component
 @RequiredArgsConstructor
 public class JwtAuthFilter extends OncePerRequestFilter {
@@ -25,6 +33,15 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
     private final UserDetailsServiceImpl userDetailsServiceImpl;
 
+    /**
+     * Performs JWT validation on incoming requests.
+     *
+     * @param request     the HTTP request
+     * @param response    the HTTP response
+     * @param filterChain the filter chain
+     * @throws ServletException in case of servlet issues
+     * @throws IOException      in case of I/O issues
+     */
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
@@ -49,6 +66,12 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
+    /**
+     * Specifies paths that should bypass this filter (e.g. login, Swagger docs).
+     *
+     * @param request the current HTTP request
+     * @return true if the request should skip filtering, false otherwise
+     */
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getServletPath();

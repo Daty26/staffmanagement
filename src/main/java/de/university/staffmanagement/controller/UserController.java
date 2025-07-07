@@ -17,6 +17,12 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * REST controller for managing user accounts.
+ *
+ * <p>Provides endpoints for creating, updating, and retrieving users.
+ * All actions are restricted to managers.
+ */
 @RestController
 @RequestMapping("/api/v1/users")
 @Tag(
@@ -25,10 +31,21 @@ import java.util.List;
 public class UserController {
     private final UserService userService;
 
+    /**
+     * Constructs the UserController with the required user service.
+     *
+     * @param userService the service handling user logic
+     */
     public UserController(UserService userService) {
         this.userService = userService;
     }
 
+    /**
+     * Creates a new user.
+     *
+     * @param userRequestDTO the user data to create
+     * @return the created user
+     */
     @PostMapping
     @Operation(
             summary = "Creating user"
@@ -38,6 +55,14 @@ public class UserController {
         return new ResponseEntity<>(new ResponseWrapper<>(userService.create(userRequestDTO)), HttpStatus.CREATED);
     }
 
+    /**
+     * Updates the username and email of the currently authenticated user.
+     *
+     * @param username the new username
+     * @param email the new email
+     * @param user the currently authenticated user
+     * @return the updated user
+     */
     @PutMapping("/{id}")
     @Operation(
             summary = "Updating user"
@@ -50,6 +75,12 @@ public class UserController {
         return new ResponseEntity<>(new ResponseWrapper<>(userService.update(user, username, email)), HttpStatus.OK);
     }
 
+    /**
+     * Retrieves a user by their ID.
+     *
+     * @param id the ID of the user
+     * @return the user with the given ID
+     */
     @GetMapping("/{id}")
     @Operation(
             summary = "Getting user by id"
@@ -60,6 +91,11 @@ public class UserController {
         return new ResponseEntity<>(new ResponseWrapper<>(userService.get(id)), HttpStatus.OK);
     }
 
+    /**
+     * Retrieves a list of all users.
+     *
+     * @return all users in the system
+     */
     @GetMapping
     @Operation(
             summary = "Getting all users"

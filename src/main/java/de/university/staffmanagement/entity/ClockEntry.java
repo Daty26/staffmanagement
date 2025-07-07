@@ -6,6 +6,12 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
+/**
+ * Entity representing a clock-in/clock-out record for a user.
+ *
+ * <p>Each entry contains a start time, an optional end time,
+ * and a reference to the associated user.
+ */
 @Entity
 @Setter
 @Getter
@@ -18,7 +24,8 @@ public class ClockEntry {
     @Column(nullable = false)
     private LocalDateTime clockInTime;
 
-    private LocalDateTime clockOutTime; // Can be null
+    // Can be null if the user hasn't clocked out yet
+    private LocalDateTime clockOutTime;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)

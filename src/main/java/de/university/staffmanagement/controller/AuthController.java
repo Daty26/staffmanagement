@@ -16,6 +16,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * REST controller for handling authentication-related endpoints.
+ *
+ * <p>Provides login and token refresh functionalities for the staff management system.
+ * Returns a JWT token upon successful authentication.
+ */
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1")
@@ -26,7 +32,12 @@ public class AuthController {
 
     private final AuthService authService;
 
-
+    /**
+     * Authenticates the user with provided credentials and returns a JWT token.
+     *
+     * @param authRequestDTO the login request containing username and password
+     * @return an authentication response with access and refresh tokens
+     */
     @PostMapping("/login")
     @Operation(
             summary = "Authentication"
@@ -35,6 +46,12 @@ public class AuthController {
         return authService.authenticate(authRequestDTO);
     }
 
+    /**
+     * Refreshes an expired JWT token using a valid refresh token.
+     *
+     * @param refreshTokenRequestDTO the request containing the refresh token
+     * @return a new set of JWT and refresh tokens
+     */
     @Operation(
             summary = "JWT token refreshing"
     )

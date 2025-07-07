@@ -4,6 +4,12 @@ import lombok.Data;
 import de.university.staffmanagement.enums.Role;
 
 
+/**
+ * DTO for creating a new user account.
+ *
+ * <p>Includes username, password, email, and role.
+ * Fields are validated to ensure they are not blank.
+ */
 @Data
 public class UserRequestDTO {
 

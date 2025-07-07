@@ -6,6 +6,11 @@ import lombok.Data;
 
 import java.time.LocalDate;
 
+/**
+ * DTO representing an assigned shift for a user.
+ *
+ * <p>Includes shift date, time range, role, schedule type, and employee name.
+ */
 @Data
 public class ShiftAssignmentResponse{
     private Long shiftId;

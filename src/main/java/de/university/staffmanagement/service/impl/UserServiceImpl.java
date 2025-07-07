@@ -15,6 +15,22 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Implementation of the {@link de.university.staffmanagement.service.UserService} interface.
+ *
+ * <p>This service handles user creation, updating, and retrieval within the staff management system.
+ *
+ * <p>Main functionalities include:
+ * <ul>
+ *     <li>Registering new users with unique usernames and emails</li>
+ *     <li>Updating user credentials (username/email)</li>
+ *     <li>Fetching user information individually or as a list</li>
+ * </ul>
+ *
+ * <p>Uses {@link UserRepository} for persistence,
+ * {@link UserMapper} for entity-DTO transformation,
+ * and {@link PasswordEncoder} for securing passwords.
+ */
 @Service
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
@@ -27,6 +43,14 @@ public class UserServiceImpl implements UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    /**
+     * Creates a new user based on the provided request DTO.
+     * The password is encrypted and the default role is set to EMPLOYEE unless specified.
+     *
+     * @param userRequestDTO the user's registration information
+     * @return the created user as a response DTO
+     * @throws GeneralException if the username or email already exists, or the password is empty
+     */
     @Override
     public UserResponseDTO create(UserRequestDTO userRequestDTO) {
         if (userRepository.existsByUsername(userRequestDTO.getUsername())) {
@@ -48,6 +72,15 @@ public class UserServiceImpl implements UserService {
         return userMapper.toDTO(user);
     }
 
+    /**
+     * Updates the username and email of an existing user.
+     *
+     * @param user the existing user entity to update
+     * @param username the new username to assign
+     * @param email the new email to assign
+     * @return the updated user as a response DTO
+     * @throws GeneralException if the new username or email already exists
+     */
     @Override
     public UserResponseDTO update(User user, String username, String email) {
         if (userRepository.existsByUsername(username)) {
@@ -65,11 +98,23 @@ public class UserServiceImpl implements UserService {
         return userMapper.toDTO(user);
     }
 
+    /**
+     * Retrieves a user by their ID.
+     *
+     * @param id the ID of the user
+     * @return the user as a response DTO
+     * @throws GeneralException if the user is not found
+     */
     @Override
     public UserResponseDTO get(Long id) {
         return userMapper.toDTO(userRepository.findById(id).orElseThrow(() -> new GeneralException("User not found")));
     }
 
+    /**
+     * Retrieves all users in the system.
+     *
+     * @return a list of all users as response DTOs
+     */
     @Override
     public List<UserResponseDTO> getAll() {
         return userRepository.findAll()

@@ -6,6 +6,11 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
+/**
+ * Entity representing a notification sent to a user.
+ *
+ * <p>Each notification includes a message, timestamp, read status, and the associated recipient user.
+ */
 @Entity
 @Getter
 @Setter

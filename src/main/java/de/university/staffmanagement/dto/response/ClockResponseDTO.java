@@ -5,6 +5,11 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 
+/**
+ * DTO representing a clock-in and clock-out record for a user.
+ *
+ * <p>Includes timestamps and the associated user's ID.
+ */
 @Data
 public class ClockResponseDTO {
     private LocalDateTime clockInTime;

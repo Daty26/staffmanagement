@@ -10,6 +10,11 @@ import lombok.Data;
 
 import java.time.LocalDate;
 
+/**
+ * DTO for submitting or updating a user's personal information.
+ *
+ * <p>Includes name, contact details, role, birth date, and associated username.
+ */
 @Data
 public class PersonalInfoRequestDTO {
 

@@ -7,6 +7,11 @@ import lombok.Data;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+/**
+ * Entity representing a scheduled shift assigned to a user.
+ *
+ * <p>Includes the shift date, time range, schedule type, and the associated employee.
+ */
 @Entity
 @Data
 public class ShiftAssignment {

@@ -20,7 +20,23 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
+/**
+ * Implementation of the {@link de.university.staffmanagement.service.LeaveService} interface.
+ *
+ * <p>This service handles the creation, retrieval, status updates, and user-specific queries
+ * for leave requests in the staff management system.
+ *
+ * <p>It uses {@link LeaveRepository} for persistence, {@link LeaveMapper} for DTO transformation,
+ * and {@link NotificationService} to notify users about leave request events.
+ *
+ * <p>Main functionalities include:
+ * <ul>
+ *     <li>Creating a new leave request and notifying the user</li>
+ *     <li>Fetching all leave requests or filtered ones by status/user</li>
+ *     <li>Approving or rejecting leave requests and notifying the user</li>
+ * </ul>
+ *
+ */
 @Service
 public class LeaveServiceImpl implements LeaveService {
     private final LeaveRepository leaveRepository;
@@ -28,6 +44,7 @@ public class LeaveServiceImpl implements LeaveService {
     private final UserRepository userRepository;
     private final NotificationService notificationService;
     private final PersonalInfoRepository personalInfoRepository;
+
 
     public LeaveServiceImpl(LeaveRepository leaveRepository, LeaveMapper leaveMapper, UserRepository userRepository, NotificationService notificationService, PersonalInfoRepository personalInfoRepository) {
         this.leaveRepository = leaveRepository;
@@ -37,7 +54,14 @@ public class LeaveServiceImpl implements LeaveService {
         this.personalInfoRepository = personalInfoRepository;
     }
 
-
+    /**
+     * Creates a new leave request for the specified user and sets its status to PENDING.
+     * A notification is also sent to the user confirming the request creation.
+     *
+     * @param leaveRequestDTO the data of the leave request (dates, type, reason)
+     * @param user the user submitting the leave request
+     * @return the saved leave request as a response DTO
+     */
     @Override
     public LeaveResponseDTO create(LeaveRequestDTO leaveRequestDTO, User user) {
         LeaveRequest leaveRequest = leaveMapper.toEntity(leaveRequestDTO);
@@ -54,7 +78,11 @@ public class LeaveServiceImpl implements LeaveService {
         return leaveMapper.toDTO(savedRequest);
     }
 
-
+    /**
+     * Retrieves all leave requests from the system.
+     *
+     * @return a list of all leave requests as DTOs
+     */
     @Override
     public List<LeaveResponseDTO> getAll() {
         return leaveRepository.findAll()
@@ -63,12 +91,27 @@ public class LeaveServiceImpl implements LeaveService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Retrieves a leave request by its ID.
+     *
+     * @param id the ID of the leave request
+     * @return the leave request as a DTO
+     * @throws GeneralException if no leave request is found with the given ID
+     */
     @Override
     public LeaveResponseDTO getReqById(Long id) {
         return leaveMapper.toDTO(leaveRepository.findById(id).orElseThrow(() -> new GeneralException("The request is not found")));
     }
 
 
+    /**
+     * Retrieves leave requests with a specific status for a specific user.
+     *
+     * @param status the status to filter by (e.g. PENDING, APPROVED)
+     * @param userId the ID of the user
+     * @return a list of filtered leave requests as DTOs
+     * @throws RuntimeException if no user is found with the given ID
+     */
     @Override
     public List<LeaveResponseDTO> getByStatus(Status status, Long userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User Id not found"));
@@ -77,6 +120,15 @@ public class LeaveServiceImpl implements LeaveService {
                 .map(leaveMapper::toDTO)
                 .collect(Collectors.toList());
     }
+
+    /**
+     * Updates the status and manager comment of a leave request and sends a notification to the user.
+     *
+     * @param id the ID of the leave request
+     * @param leaveStatusUpdateDTO contains the new status and an optional manager comment
+     * @return the updated leave request as a DTO
+     * @throws GeneralException if no leave request is found with the given ID
+     */
 
     @Override
     public LeaveResponseDTO updateStatus(Long id, LeaveStatusUpdateDTO leaveStatusUpdateDTO) {
@@ -91,6 +143,13 @@ public class LeaveServiceImpl implements LeaveService {
 
         return leaveMapper.toDTO(leaveRequest);
     }
+    /**
+     * Retrieves all leave requests submitted by a specific user.
+     *
+     * @param userId the ID of the user
+     * @return a list of leave requests belonging to the user
+     * @throws GeneralException if the user is not found
+     */
     @Override
     public List<LeaveResponseDTO> getReqByUserId(Long userId) {
         User user = userRepository.findById(userId)

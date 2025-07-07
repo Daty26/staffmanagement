@@ -9,6 +9,11 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 
+/**
+ * Entity representing a leave request submitted by a user.
+ *
+ * <p>Includes leave type, date range, reason, status, manager comments, and a reference to the requesting user.
+ */
 @Entity
 @Data
 public class LeaveRequest {
@@ -17,7 +22,6 @@ public class LeaveRequest {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long requestId;
 
-    //Maybe create enums for leave_type?
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private LeaveType leaveType;

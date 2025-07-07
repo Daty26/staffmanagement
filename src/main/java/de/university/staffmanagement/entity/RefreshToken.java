@@ -8,6 +8,11 @@ import lombok.NoArgsConstructor;
 
 import java.time.Instant;
 
+/**
+ * Entity representing a refresh token used for renewing access tokens.
+ *
+ * <p>Each token is linked to a specific user and has an expiration timestamp.
+ */
 @Entity
 @Data
 @AllArgsConstructor

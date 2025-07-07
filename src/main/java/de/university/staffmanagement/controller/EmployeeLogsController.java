@@ -14,6 +14,13 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import java.time.LocalDate;
 import java.util.List;
 
+
+/**
+ * REST controller for retrieving employee attendance logs.
+ *
+ * <p>Provides an endpoint for managers to view an employee's clock-in/out and attendance
+ * overview for a selected week.
+ */
 @RequestMapping("/api/v1/logs")
 @RestController
 @Tag(name = "Controller for viewing employee logs")
@@ -21,10 +28,23 @@ public class EmployeeLogsController {
 
     private final EmployeeLogsService employeeLogsService;
 
+    /**
+     * Constructs the controller with required service.
+     *
+     * @param employeeLogsService the service for fetching employee logs
+     */
     public EmployeeLogsController(EmployeeLogsService employeeLogsService) {
         this.employeeLogsService = employeeLogsService;
     }
 
+    /**
+     * Returns a weekly overview of a given employee's attendance.
+     * Only accessible to users with the MANAGER role.
+     *
+     * @param userId     the ID of the employee
+     * @param weekStart  the start date (Monday) of the week to retrieve
+     * @return a wrapped list of employee log responses for the given week
+     */
     @GetMapping
     @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<ResponseWrapper<List<EmployeeResponseDTO>>> getWeeklyOverview(
