@@ -1,63 +1,108 @@
 package de.university.staffmanagement.config;
 
-import de.university.staffmanagement.entity.User;
+import de.university.staffmanagement.entity.*;
 import de.university.staffmanagement.enums.Role;
-import de.university.staffmanagement.repository.UserRepository;
+import de.university.staffmanagement.enums.ScheduleType;
+import de.university.staffmanagement.repository.*;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.stereotype.Component;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 /**
- * Initializes default user data (a manager and an employee) on application startup
- * if no users exist in the database.
- *
- * <p>This class is executed automatically by Spring Boot through {@link CommandLineRunner}.
+ * Initializes users, personal info, one shift, and 15 clock entries (yesterday to -15 days).
  */
 @Component
 public class DataInitializer implements CommandLineRunner {
 
     private final UserRepository userRepository;
+    private final PersonalInfoRepository personalInfoRepository;
+    private final ShiftAssignmentRepository shiftAssignmentRepository;
+    private final ClockEntryRepository clockEntryRepository;
     private final PasswordEncoder passwordEncoder;
 
-    /**
-     * Constructs the DataInitializer with the required dependencies.
-     *
-     * @param userRepository the repository for persisting users
-     * @param passwordEncoder the encoder used to securely hash passwords
-     */
-    public DataInitializer(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public DataInitializer(UserRepository userRepository, PersonalInfoRepository personalInfoRepository, ShiftAssignmentRepository shiftAssignmentRepository,ClockEntryRepository clockEntryRepository,  PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.personalInfoRepository = personalInfoRepository;
+        this.shiftAssignmentRepository = shiftAssignmentRepository;
+        this.clockEntryRepository = clockEntryRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
-    /**
-     * Creates a manager and an employee user if the database is empty.
-     * Logs the action to the console. Does nothing if users already exist.
-     *
-     * @param args startup arguments passed by Spring Boot
-     * @throws Exception in case of any initialization error
-     */
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
         if (userRepository.count() == 0) {
-            User admin = new User();
-            admin.setUsername("manager");
-            admin.setEmail("manager@example.com");
-            admin.setPassword(passwordEncoder.encode("manager123"));
-            admin.setRole(Role.MANAGER);
 
-            User employee = new User();
-            employee.setUsername("employee");
-            employee.setEmail("employee@example.com");
-            employee.setPassword(passwordEncoder.encode("emp123"));
-            employee.setRole(Role.EMPLOYEE);
+            // Create manager
+            User manager = createUser("ktsa1", "ktsa1@ktsa.de", "1234", Role.MANAGER);
+            createPersonalInfo(manager, "Anna Schmidt", "Musterstraße 1, 95028 Hof", "0151-0000001", LocalDate.of(1980, 5, 12));
+            assignSingleShift(manager, LocalTime.of(8, 0), LocalTime.of(16, 0), ScheduleType.MORNING_SHIFT);
+            createPastClockEntries(manager, LocalTime.of(8, 0), LocalTime.of(16, 0));
 
-            userRepository.save(admin);
-            userRepository.save(employee);
+            // Create 10 employees
+            for (int i = 2; i <= 11; i++) {
+                String username = "ktsa" + i;
+                User employee = createUser(username, username + "@ktsa.de", "1234", Role.EMPLOYEE);
 
-            System.out.println("Initialized admin and employee users.");
+                String fullName = "Max Mitarbeiter " + i;
+                String address = "Beispielweg " + i + ", 95028 Hof";
+                String phone = "0151-00000" + i;
+                LocalDate birthDate = LocalDate.of(1990 + i, i % 12 + 1, i % 28 + 1);
+
+                createPersonalInfo(employee, fullName, address, phone, birthDate);
+                assignSingleShift(employee, LocalTime.of(9, 0), LocalTime.of(17, 0), ScheduleType.MORNING_SHIFT);
+                createPastClockEntries(employee, LocalTime.of(9, 0), LocalTime.of(18, 0));
+            }
+
+            System.out.println("✅ Initialized users with 1 shift and 15 days of past clock entries.");
         } else {
-            System.out.println("Users already exist, skipping initialization.");
+            System.out.println("ℹ️ Users already exist, skipping initialization.");
+        }
+    }
+
+    private User createUser(String username, String email, String rawPassword, Role role) {
+        User user = new User();
+        user.setUsername(username);
+        user.setEmail(email);
+        user.setPassword(passwordEncoder.encode(rawPassword));
+        user.setRole(role);
+        return userRepository.save(user);
+    }
+
+    private void createPersonalInfo(User user, String fullName, String address, String phone, LocalDate birthDate) {
+        PersonalInfo info = new PersonalInfo();
+        info.setUser(user);
+        info.setFullName(fullName);
+        info.setAddress(address);
+        info.setPhoneNumber(phone);
+        info.setBirthDate(birthDate);
+        personalInfoRepository.save(info);
+    }
+
+    private void assignSingleShift(User user, LocalTime start, LocalTime end, ScheduleType type) {
+        ShiftAssignment shift = new ShiftAssignment();
+        shift.setUser(user);
+        shift.setShiftDate(LocalDate.now()); // Single shift for today only
+        shift.setStartTime(start);
+        shift.setEndTime(end);
+        shift.setShiftType(type);
+        shiftAssignmentRepository.save(shift);
+    }
+
+    private void createPastClockEntries(User user, LocalTime start, LocalTime end) {
+        LocalDate today = LocalDate.now();
+
+        for (int i = 1; i <= 15; i++) {
+            LocalDate date = today.minusDays(i);
+
+            ClockEntry clock = new ClockEntry();
+            clock.setUser(user);
+            clock.setClockInTime(LocalDateTime.of(date, start.plusMinutes(5)));
+            clock.setClockOutTime(LocalDateTime.of(date, end.minusMinutes(5)));
+            clockEntryRepository.save(clock);
         }
     }
 }
