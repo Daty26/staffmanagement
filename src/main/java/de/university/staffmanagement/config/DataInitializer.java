@@ -39,7 +39,6 @@ public class DataInitializer implements CommandLineRunner {
             // Create manager
             User manager = createUser("ktsa1", "ktsa1@ktsa.de", "1234", Role.MANAGER);
             createPersonalInfo(manager, "Anna Schmidt", "Musterstraße 1, 95028 Hof", "0151-0000001", LocalDate.of(1980, 5, 12));
-            assignSingleShift(manager, LocalTime.of(8, 0), LocalTime.of(16, 0), ScheduleType.MORNING_SHIFT);
             createPastClockEntries(manager, LocalTime.of(8, 0), LocalTime.of(16, 0));
 
             // Create 10 employees
