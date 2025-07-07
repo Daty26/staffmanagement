@@ -21,4 +21,5 @@ public class ShiftAssignmentResponse{
     private Role role;
     private ScheduleType shiftType;
     private String fullName;
+    private Long userId;
 }
