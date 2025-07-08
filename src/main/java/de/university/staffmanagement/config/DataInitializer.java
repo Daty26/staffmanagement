@@ -56,9 +56,9 @@ public class DataInitializer implements CommandLineRunner {
                 createPastClockEntries(employee, LocalTime.of(9, 0), LocalTime.of(18, 0));
             }
 
-            System.out.println("✅ Initialized users with 1 shift and 15 days of past clock entries.");
+            System.out.println("Initialized users with  clock entries.");
         } else {
-            System.out.println("ℹ️ Users already exist, skipping initialization.");
+            System.out.println("Users already exist, skipping initialization.");
         }
     }
 

@@ -138,7 +138,7 @@ public class LeaveServiceImpl implements LeaveService {
         leaveRequest.setManagerComment(leaveStatusUpdateDTO.getManagerComment());
 
         leaveRepository.save(leaveRequest);
-        String msg = "Your request for " + leaveRequest.getLeaveType().toString().toLowerCase() + "request has been " + leaveStatusUpdateDTO.getNewStatus().toString().toLowerCase();
+        String msg = "Your request for " + leaveRequest.getLeaveType().toString().toLowerCase() + " request has been " + leaveStatusUpdateDTO.getNewStatus().toString().toLowerCase();
         notificationService.sendNotification(leaveRequest.getUser().getUsername(), msg);
 
         return leaveMapper.toDTO(leaveRequest);
