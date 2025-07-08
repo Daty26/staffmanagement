@@ -55,6 +55,7 @@ class PersonalInfoServiceImplTest {
         PersonalInfo newInfo = new PersonalInfo();
         newInfo.setUser(user);
         when(personalInfoRepository.save(any())).thenReturn(newInfo);
+        when(personalInfoMapper.toDTO(any())).thenReturn(new PersonalInfoResponseDTO(user));
 
         PersonalInfoResponseDTO result = personalInfoService.update(request, user);
 
